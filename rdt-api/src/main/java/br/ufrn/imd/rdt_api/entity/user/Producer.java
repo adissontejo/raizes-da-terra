@@ -1,6 +1,5 @@
-package br.ufrn.imd.rdt_api.entity.producer;
+package br.ufrn.imd.rdt_api.entity.user;
 
-import br.ufrn.imd.rdt_api.entity.user.UserAccount;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
