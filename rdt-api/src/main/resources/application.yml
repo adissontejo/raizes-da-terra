@@ -44,3 +44,7 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql: TRACE
     org.flywaydb: DEBUG
+
+app:
+  storage:
+    upload-dir: ${APP_STORAGE_UPLOAD_DIR:uploads}
