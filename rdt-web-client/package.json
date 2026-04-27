@@ -10,11 +10,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@react-input/mask": "^2.0.4",
+    "@solar-icons/react": "^1.1.0",
     "@tailwindcss/vite": "^4.2.4",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
+    "react-hook-form": "^7.74.0",
+    "react-merge-refs": "^3.0.2",
     "react-router": "^7.14.2",
-    "tailwindcss": "^4.2.4"
+    "tailwindcss": "^4.2.4",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",

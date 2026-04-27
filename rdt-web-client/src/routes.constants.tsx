@@ -1,9 +1,14 @@
 import type { RouteObject } from "react-router";
-import { Main } from "./pages/Main";
+import { Home } from "./pages/Home";
+import { RegisterProducer } from "./pages/RegisterProducer";
 
 export const routes: RouteObject[] = [
   {
     path: "/",
-    element: <Main />,
+    element: <Home />,
+  },
+  {
+    path: "/cadastro-produtor",
+    element: <RegisterProducer />,
   },
 ];
