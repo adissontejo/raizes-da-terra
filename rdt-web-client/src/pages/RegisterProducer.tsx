@@ -1,14 +1,15 @@
+import { useNavigate } from "react-router";
+import { mergeRefs } from "react-merge-refs";
 import { useMask } from "@react-input/mask";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Leaf } from "@solar-icons/react";
 import z from "zod";
-import backgroundImg from "~/assets/register-producer-background.jpg";
 import logoDarkImg from "~/assets/logo-dark.svg";
+import backgroundImg from "~/assets/register-producer-background.jpg";
 import { Input } from "~/components/Input";
 import { Button } from "~/components/Button";
 import { Select } from "~/components/Select";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { mergeRefs } from "react-merge-refs";
 
 const registerSchema = z.object({
   name: z
@@ -16,7 +17,7 @@ const registerSchema = z.object({
     .nonempty("Preencha este campo")
     .min(2, "Mínimo 2 caracteres")
     .max(100, "Máximo 100 caracteres"),
-  email: z.email("E-mail inválido!").nonempty("Preencha este campo"),
+  email: z.email("E-mail inválido").max(100, "Máximo 100 caracteres"),
   password: z
     .string()
     .nonempty("Preencha este campo")
@@ -39,14 +40,14 @@ const registerSchema = z.object({
     .max(100, "Máximo 100 caracteres"),
   phone: z
     .string()
-    .regex(/^\(\d{2}\) \d{5}-\d{4}$/, "Telefone inválido!")
+    .regex(/^\(\d{2}\) \d{5}-\d{4}$/, "Telefone inválido")
     .transform((value) => value.replace(/\D/g, "")),
 });
 
+type FormData = z.infer<typeof registerSchema>;
+
 export const RegisterProducer = () => {
-  const { register, formState, handleSubmit } = useForm<
-    z.infer<typeof registerSchema>
-  >({
+  const { register, formState, handleSubmit } = useForm<FormData>({
     resolver: zodResolver(registerSchema),
     reValidateMode: "onBlur",
   });
@@ -57,6 +58,14 @@ export const RegisterProducer = () => {
     replacement: { _: /\d/ },
   });
   const phoneInputRef = mergeRefs([phoneInputFormRef, phoneInputMaskRef]);
+
+  const navigate = useNavigate();
+
+  const onSubmit = (data: FormData) => {
+    console.log(data);
+
+    navigate("/configuracoes-produtor");
+  };
 
   return (
     <div className="flex w-full h-screen border">
@@ -89,7 +98,7 @@ export const RegisterProducer = () => {
 
       <main className="bg-base-background flex-1 min-w-1/2 max-h-screen overflow-y-auto py-12 px-24">
         <div className="flex flex-col justify-center w-full min-h-full max-w-5xl">
-          <img src={logoDarkImg} className="w-fit h-fit pb-20" />
+          <img src={logoDarkImg} className="h-11.25 pb-20" />
 
           <div className="pb-10 flex flex-col gap-2.5 max-w-md">
             <p className="font-medium text-xs tracking-[1.2px] uppercase text-[#D4845A]">
@@ -106,7 +115,7 @@ export const RegisterProducer = () => {
 
           <form
             className="pb-16 flex flex-col gap-6 w-full"
-            onSubmit={handleSubmit((data) => console.log(data))}
+            onSubmit={handleSubmit(onSubmit)}
           >
             <div className="w-full grid grid-cols-2 gap-6">
               <Input
@@ -160,9 +169,10 @@ export const RegisterProducer = () => {
             </p>
             <button
               className="
-              rounded-xs border border-[#C9A97A66] py-2 px-6 bg-[#C9A97A1A] text-sm font-medium text-[#2C1A0E]
-              hover:brightness-80 transition-[filter]
-            "
+                rounded-xs border border-[#C9A97A66] py-2 px-6 bg-[#C9A97A1A] text-sm font-medium text-[#2C1A0E]
+                hover:brightness-80 transition-[filter]
+              "
+              onClick={() => navigate("/")}
             >
               Acessar painel
             </button>

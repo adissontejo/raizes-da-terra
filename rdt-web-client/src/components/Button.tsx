@@ -21,10 +21,12 @@ export const Button = ({
       className={`
         ${className}
         px-8 py-3 rounded-lg bg-base-title flex justify-center items-center gap-2
-        hover:brightness-80 transition-[filter]
+        text-sm text-base-background font-medium
+        hover:brightness-80 disabled:cursor-not-allowed disabled:brightness-100 disabled:bg-base-label
+        transition-[filter] transition-colors
       `}
     >
-      <p className="text-sm text-base-background font-medium">{label}</p>
+      <span>{label}</span>
       {Icon && <Icon size={20} color="var(--color-base-background)" />}
     </button>
   );

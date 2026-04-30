@@ -34,6 +34,10 @@
     font-family: var(--font-inter);
   }
 
+  body {
+    background-color: var(--color-base-background);
+  }
+
   * {
     box-sizing: border-box;
     margin: 0;
@@ -66,7 +70,7 @@
   }
 
   * {
-    scrollbar-color: var(--color-clay-dark) transparent;
+    scrollbar-color: var(--color-clay-dark) var(--color-base-background);
   }
 
   *::-webkit-scrollbar {
@@ -75,11 +79,11 @@
   }
 
   *::-webkit-scrollbar-track {
-    background: transparent;
+    background-color: var(--color-base-background);
   }
 
   *::-webkit-scrollbar-thumb {
-    background-color: rgba(122, 78, 45, 0.4);
+    background-color: var(--color-clay-dark);
     border-radius: 999px;
     border: 2px solid transparent;
     background-clip: content-box;
