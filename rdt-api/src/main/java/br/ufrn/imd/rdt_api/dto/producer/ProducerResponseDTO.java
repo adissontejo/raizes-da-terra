@@ -6,10 +6,11 @@ public record ProducerResponseDTO(
         Long id,
         String brandName,
         String profilePhotoUrl,
-        /*String cnpj,
+        String bannerUrl,
+        String cnpj,
         String email,
         String phone,
-        String address,*/
+        String address,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {}

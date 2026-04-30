@@ -1,0 +1,6 @@
+ALTER TABLE producer
+    ADD COLUMN banner_url TEXT,
+    ADD COLUMN cnpj VARCHAR(14) UNIQUE,
+    ADD COLUMN email VARCHAR(255) UNIQUE,
+    ADD COLUMN phone VARCHAR(11),
+    ADD COLUMN address TEXT;
