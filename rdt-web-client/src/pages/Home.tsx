@@ -12,7 +12,7 @@ import {
 } from "@solar-icons/react";
 import type { Icon } from "@solar-icons/react/lib/types";
 import { useRef } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import backgroundImg from "~/assets/home-background.png";
 import logoImg from "~/assets/logo.svg";
 import { Button } from "~/components/Button";
@@ -60,6 +60,8 @@ const BenefitCard = ({ icon: Icon, title, label }: BenefitCardProps) => {
 export const Home = () => {
   const productViewRef = useRef<HTMLDivElement>(null);
 
+  const navigate = useNavigate();
+
   return (
     <div className="w-full flex flex-col">
       <div className="w-full h-screen relative">
@@ -76,7 +78,7 @@ export const Home = () => {
           }}
         >
           <header className="flex justify-between w-full">
-            <img src={logoImg} />
+            <img src={logoImg} className="h-11.25" />
 
             <button
               className="
@@ -111,7 +113,10 @@ export const Home = () => {
                 <button className="relative top-0.5 pb-3 text-sm border-b-2 transition-colors pt-0.5 text-base-title font-medium  border-b-base-title">
                   Entrar
                 </button>
-                <button className="relative top-0.5 pb-3 text-sm border-b-2 border-b-transparent transition-colors pt-0.5 text-clay">
+                <button
+                  className="relative top-0.5 pb-3 text-sm border-b-2 border-b-transparent transition-colors pt-0.5 text-clay"
+                  onClick={() => navigate("/configuracoes-produtor")}
+                >
                   Criar conta
                 </button>
               </div>
@@ -125,7 +130,13 @@ export const Home = () => {
                 </p>
               </div>
 
-              <form className="flex flex-col gap-5">
+              <form
+                className="flex flex-col gap-5"
+                onSubmit={(e) => [
+                  e.preventDefault(),
+                  navigate("/configuracoes-produtor"),
+                ]}
+              >
                 <Input label="E-mail" placeholder="seu@email.com" />
                 <Input label="Senha" type="password" placeholder="••••••••" />
                 <Button label="Entrar na Plataforma" solarIcon={ArrowRight} />
