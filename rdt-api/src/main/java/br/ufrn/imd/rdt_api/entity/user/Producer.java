@@ -11,10 +11,6 @@ public class Producer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_account_id", nullable = false, unique = true)
-    private UserAccount userAccount;
-
     @Column(name = "brand_name", nullable = false)
     private String brandName;
 
@@ -57,9 +53,6 @@ public class Producer {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
-    public UserAccount getUserAccount() { return userAccount; }
-    public void setUserAccount(UserAccount userAccount) { this.userAccount = userAccount; }
 
     public String getBrandName() { return brandName; }
     public void setBrandName(String brandName) { this.brandName = brandName; }
