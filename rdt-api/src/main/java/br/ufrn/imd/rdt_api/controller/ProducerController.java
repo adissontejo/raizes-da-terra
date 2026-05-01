@@ -2,12 +2,10 @@ package br.ufrn.imd.rdt_api.controller;
 import br.ufrn.imd.rdt_api.dto.ApiResponse;
 import br.ufrn.imd.rdt_api.dto.producer.ProducerRequestDTO;
 import br.ufrn.imd.rdt_api.dto.producer.ProducerResponseDTO;
-import br.ufrn.imd.rdt_api.dto.product.ProductResponseDTO;
 import br.ufrn.imd.rdt_api.entity.user.Producer;
 import br.ufrn.imd.rdt_api.mapper.ProducerMapper;
 import br.ufrn.imd.rdt_api.repository.ProducerRepository;
 import br.ufrn.imd.rdt_api.service.ProducerService;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +17,9 @@ import java.util.List;
 @RequestMapping("/api/producers")
 public class ProducerController {
     private final ProducerService service;
-    private final ProducerMapper mapper;
-    private final ProducerRepository producerRepository;
 
-    public ProducerController(ProducerService service, ProducerMapper mapper, ProducerRepository producerRepository) {
+    public ProducerController(ProducerService service) {
         this.service = service;
-        this.mapper = mapper;
-        this.producerRepository = producerRepository;
     }
 
     @GetMapping
