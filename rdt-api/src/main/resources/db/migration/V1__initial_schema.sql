@@ -9,11 +9,8 @@ CREATE TABLE user_account (
 
 CREATE TABLE producer (
       id BIGSERIAL PRIMARY KEY,
-      user_account_id BIGINT NOT NULL UNIQUE,
       brand_name VARCHAR(255) NOT NULL,
       profile_photo_url TEXT,
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      CONSTRAINT fk_producer_user
-          FOREIGN KEY (user_account_id) REFERENCES user_account(id)
+      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
