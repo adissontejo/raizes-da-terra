@@ -1,5 +1,6 @@
 package br.ufrn.imd.rdt_api.service;
 
+import br.ufrn.imd.rdt_api.dto.producer.ProducerRequestDTO;
 import br.ufrn.imd.rdt_api.dto.producer.ProducerResponseDTO;
 import br.ufrn.imd.rdt_api.entity.user.Producer;
 import br.ufrn.imd.rdt_api.mapper.ProducerMapper;
@@ -33,6 +34,22 @@ public class ProducerService {
     public Producer findById(Long id) {
         return producerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Produtor não encontrado."));
+    }
+
+    @Transactional
+    public ProducerResponseDTO create(ProducerRequestDTO dto) {
+        Producer producer = mapper.toEntity(dto);
+        return mapper.toResponse(producerRepository.save(producer));
+    }
+
+    @Transactional
+    public ProducerResponseDTO update(Long id, ProducerRequestDTO dto) {
+        Producer existingProducer = producerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Produtor não encontrado."));
+
+        mapper.updateEntity(existingProducer, dto);
+        Producer updatedProducer = producerRepository.save(existingProducer);
+        return mapper.toResponse(updatedProducer);
     }
 
     @Transactional

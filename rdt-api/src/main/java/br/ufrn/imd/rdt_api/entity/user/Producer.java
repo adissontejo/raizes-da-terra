@@ -67,7 +67,7 @@ public class Producer {
     public String getProfilePhotoUrl() { return profilePhotoUrl; }
     public void setProfilePhotoUrl(String profilePhotoUrl) { this.profilePhotoUrl = profilePhotoUrl; }
 
-    /*public String getBannerUrl() { return bannerUrl; }
+    public String getBannerUrl() { return bannerUrl; }
     public void setBannerUrl(String bannerUrl) { this.bannerUrl = bannerUrl; }
 
     public String getCnpj() { return cnpj; }
@@ -80,7 +80,7 @@ public class Producer {
     public void setPhone(String phone) { this.phone = phone; }
 
     public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }*/
+    public void setAddress(String address) { this.address = address; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }

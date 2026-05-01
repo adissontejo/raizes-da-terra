@@ -13,10 +13,11 @@ public class ProducerMapper {
                 producer.getId(),
                 producer.getBrandName(),
                 producer.getProfilePhotoUrl(),
-                /*producer.getCnpj(),
+                producer.getBannerUrl(),
+                producer.getCnpj(),
                 producer.getEmail(),
                 producer.getPhone(),
-                producer.getAddress(),*/
+                producer.getAddress(),
                 producer.getCreatedAt(),
                 producer.getUpdatedAt()
         );
@@ -26,6 +27,11 @@ public class ProducerMapper {
         Producer producer = new Producer();
         producer.setBrandName(dto.brandName());
         producer.setProfilePhotoUrl(dto.profilePhotoUrl());
+        producer.setBannerUrl(dto.bannerUrl());
+        producer.setCnpj(dto.cnpj());
+        producer.setEmail(dto.email());
+        producer.setPhone(dto.phone());
+        producer.setAddress(dto.address());
         return producer;
     }
 
