@@ -1,0 +1,36 @@
+# env
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# os
+.DS_Store
+Thumbs.db
+
+# editors
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# java / maven
+target/
+.mvn/wrapper/maven-wrapper.jar
+.mvn/timing.properties
+*.class
+
+# node
+node_modules/
+dist/
+dist-ssr/
+
+# logs
+logs/
+*.log
+npm-debug.log*
+
+# uploads
+uploads/
+
