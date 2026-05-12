@@ -1,17 +1,100 @@
 @import "tailwindcss";
 
-:root {
-  font-size: 10px;
+@theme {
+  --color-clay-dark: #552d10;
+  --color-clay: #7a4e2d;
+  --color-clay-light: #e4dcd5;
+
+  --color-green-dark: #2d673e;
+  --color-green: #4a7c59;
+  --color-green-light: #e4ebe6;
+
+  --color-argil-dark: #c36939;
+  --color-argil: #d4845a;
+  --color-argil-light: #f9ede6;
+
+  --color-base-title: #2c1a0e;
+  --color-base-subtitle: #958c87;
+  --color-base-text: #56483e;
+  --color-base-label: #766a62;
+  --color-base-hover: #ddc6a4;
+
+  --color-base-button: #e6e5e5;
+  --color-base-input: #ededed;
+  --color-base-card: #f3f2f2;
+  --color-base-background: #f5e9d6;
+  --color-white: #ffffff;
+
+  --font-inter: "Inter", sans-serif;
+  --font-ibm: "IBM Plex Serif", serif;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@layer base {
+  :root {
+    font-family: var(--font-inter);
+  }
 
-button {
-  background: none;
-  border: none;
-  cursor: pointer;
+  body {
+    background-color: var(--color-base-background);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  input {
+    outline: none;
+  }
+
+  a {
+    cursor: pointer;
+
+    &:hover {
+      filter: brightness(1.1);
+    }
+
+    transition-property: filter;
+    transition-timing-function: var(
+      --tw-ease,
+      var(--default-transition-timing-function)
+    );
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+
+  * {
+    scrollbar-color: var(--color-clay-dark) var(--color-base-background);
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background-color: var(--color-base-background);
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--color-clay-dark);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+    transition: background-color 0.2s ease;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-clay);
+  }
+
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
 }
