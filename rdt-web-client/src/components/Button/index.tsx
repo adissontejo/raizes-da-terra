@@ -23,7 +23,7 @@ export const Button = ({
         px-8 py-3 rounded-lg bg-base-title flex justify-center items-center gap-2
         text-sm text-base-background font-medium
         hover:brightness-80 disabled:cursor-not-allowed disabled:brightness-100 disabled:bg-base-label
-        transition-[filter] transition-colors
+        transition-[filter,background]
       `}
     >
       <span>{label}</span>

@@ -4,50 +4,15 @@ import { useMask } from "@react-input/mask";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Leaf } from "@solar-icons/react";
-import z from "zod";
 import logoDarkImg from "~/assets/logo-dark.svg";
 import backgroundImg from "~/assets/register-producer-background.jpg";
 import { Input } from "~/components/Input";
 import { Button } from "~/components/Button";
 import { Select } from "~/components/Select";
-
-const registerSchema = z.object({
-  name: z
-    .string()
-    .nonempty("Preencha este campo")
-    .min(2, "Mínimo 2 caracteres")
-    .max(100, "Máximo 100 caracteres"),
-  email: z.email("E-mail inválido").max(100, "Máximo 100 caracteres"),
-  password: z
-    .string()
-    .nonempty("Preencha este campo")
-    .min(6, "Mínimo 6 caracteres")
-    .max(100, "Máximo 100 caracteres"),
-  state: z
-    .string()
-    .nonempty("Preencha este campo")
-    .min(2, "Mínimo 2 caracteres")
-    .max(100, "Máximo 100 caracteres"),
-  city: z
-    .string()
-    .nonempty("Preencha este campo")
-    .min(2, "Mínimo 2 caracteres")
-    .max(100, "Máximo 100 caracteres"),
-  address: z
-    .string()
-    .nonempty("Preencha este campo")
-    .min(3, "Mínimo 3 caracteres")
-    .max(100, "Máximo 100 caracteres"),
-  phone: z
-    .string()
-    .regex(/^\(\d{2}\) \d{5}-\d{4}$/, "Telefone inválido")
-    .transform((value) => value.replace(/\D/g, "")),
-});
-
-type FormData = z.infer<typeof registerSchema>;
+import { registerSchema, type RegisterFormData } from "./consts";
 
 export const RegisterProducer = () => {
-  const { register, formState, handleSubmit } = useForm<FormData>({
+  const { register, formState, handleSubmit } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     reValidateMode: "onBlur",
   });
@@ -61,7 +26,7 @@ export const RegisterProducer = () => {
 
   const navigate = useNavigate();
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: RegisterFormData) => {
     console.log(data);
 
     navigate("/configuracoes-produtor");
