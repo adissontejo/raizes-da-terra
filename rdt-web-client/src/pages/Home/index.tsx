@@ -10,52 +10,14 @@ import {
   WalletMoney,
   Widget,
 } from "@solar-icons/react";
-import type { Icon } from "@solar-icons/react/lib/types";
 import { useRef } from "react";
 import { Link, useNavigate } from "react-router";
 import backgroundImg from "~/assets/home-background.png";
 import logoImg from "~/assets/logo.svg";
 import { Button } from "~/components/Button";
 import { Input } from "~/components/Input";
-
-interface BenefitsTitleProps {
-  icon: Icon;
-  label: string;
-}
-
-const BenefitsTitle = ({ icon: Icon, label }: BenefitsTitleProps) => {
-  return (
-    <div className="w-full pb-4 border-b border-b-[#C9A97A4D] flex gap-3 items-center">
-      <Icon size={28} color="var(--color-argil)" />
-      <span className="text-xl tracking-[-0.6px] text-base-title">{label}</span>
-    </div>
-  );
-};
-
-interface BenefitCardProps {
-  icon: Icon;
-  title: string;
-  label: string;
-}
-
-const BenefitCard = ({ icon: Icon, title, label }: BenefitCardProps) => {
-  return (
-    <div className="w-full flex gap-5 group">
-      <div
-        className="
-          min-w-12 h-12 rounded-lg flex items-center justify-center
-          group-odd:bg-[#C9A97A33] group-even:bg-[#2C1A0E0D] group-even:border group-even:border-[#2C1A0E1A]
-        "
-      >
-        <Icon size={24} color="var(--color-base-title)" />
-      </div>
-      <div className="flex flex-col gap-0.5">
-        <p className="font-medium text-sm text-base-title">{title}</p>
-        <p className="text-sm text-clay">{label}</p>
-      </div>
-    </div>
-  );
-};
+import { BenefitsTitle } from "./BenefitsTitle";
+import { BenefitCard } from "./BenefitCard";
 
 export const Home = () => {
   const productViewRef = useRef<HTMLDivElement>(null);
