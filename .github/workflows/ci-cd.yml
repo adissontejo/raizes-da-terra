@@ -1,0 +1,82 @@
+name: CI/CD Pipeline
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  lint-frontend:
+    name: Lint Frontend
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.14.0'
+          cache: 'npm'
+          cache-dependency-path: './rdt-web-client/package-lock.json'
+      - run: npm ci --prefix ./rdt-web-client
+      - run: npm run lint --prefix ./rdt-web-client
+
+  check-backend:
+    name: CheckStyle Backend
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Run Checkstyle
+        run: chmod +x ./rdt-api/mvnw && ./rdt-api/mvnw checkstyle:check --file ./rdt-api/pom.xml
+
+  build-frontend:
+    name: Build Frontend
+    needs: lint-frontend
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.14.0'
+          cache: 'npm'
+          cache-dependency-path: './rdt-web-client/package-lock.json'
+      - run: npm ci --prefix ./rdt-web-client
+      - run: npm run build --prefix ./rdt-web-client
+
+  build-backend:
+    name: Build Backend
+    needs: check-backend
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build Backend
+        run: chmod +x ./rdt-api/mvnw && ./rdt-api/mvnw clean package -DskipTests --file ./rdt-api/pom.xml
+
+  create-tag:
+    name: Create Version Tag
+    needs: [ build-frontend, build-backend ]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate GitHub Tag
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.run_number }}
+          name: version ${{ github.run_number }}
+          generate_release_notes: true
+
+
