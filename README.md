@@ -13,7 +13,6 @@ Sistema composto por API REST (Spring Boot) e web client (React), orquestrados v
 ```bash
 cp .env.example .env
 cp .env.api.example .env.api
-cp .env.web.example .env.web
 ```
 
 Edite os arquivos criados e troque as senhas.
@@ -43,7 +42,6 @@ processos/
 ├── docker-compose.yml
 ├── .env.example
 ├── .env.api.example
-├── .env.web.example
 ├── rdt-api/          # Spring Boot
 └── rdt-web-client/   # React + Vite
 ```
