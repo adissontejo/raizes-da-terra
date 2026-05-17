@@ -8,9 +8,6 @@ RUN npm ci --prefer-offline
 
 COPY . .
 
-ARG VITE_API_URL=/api
-ENV VITE_API_URL=$VITE_API_URL
-
 RUN npm run build
 
 # Stage 2 – Runtime (Nginx)
