@@ -51,8 +51,6 @@ services:
     build:
       context: ./rdt-web-client
       dockerfile: Dockerfile
-      args:
-        VITE_API_URL: ${VITE_API_URL:-/api}
     image: rdt-web-client:latest
     container_name: rdt-web-client
     restart: unless-stopped
