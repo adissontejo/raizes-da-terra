@@ -28,8 +28,9 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    env_file: .env.api
     environment:
+      APP_NAME: ${APP_NAME:-raizes-da-terra-api}
+      APP_STORAGE_UPLOAD_DIR: /app/uploads
       DB_HOST: db
       DB_PORT: 5432
       DB_NAME: ${DB_NAME:-raizes_da_terra}
