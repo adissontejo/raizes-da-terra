@@ -27,5 +27,30 @@ public record ProducerRequestDTO (
     String phone,
 
     @NotBlank(message = "O endereço é obrigatório.")
-    String address
+    String address,
+
+    @NotBlank(message = "O estado é obrigatório.")
+    String state,
+
+    @NotBlank(message = "A cidade é obrigatória.")
+    String city,
+
+    String complement,
+
+    String instagram,
+
+    @NotBlank(message = "A frase é obrigatória.")
+    String bioPhrase,
+
+    @NotBlank(message = "O título da bio é obrigatório.")
+    String bioTitle,
+
+    @NotBlank(message = "A bio é obrigatória.")
+    String bio,
+
+    @NotBlank(message = "O título é obrigatória.")
+    String productsTitle,
+
+    @NotBlank(message = "O subtítulo é obrigatório.")
+    String productsSubtitle
 ) {}

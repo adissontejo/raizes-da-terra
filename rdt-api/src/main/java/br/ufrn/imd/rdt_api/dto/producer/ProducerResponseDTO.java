@@ -11,6 +11,15 @@ public record ProducerResponseDTO(
         String email,
         String phone,
         String address,
+        String state,
+        String city,
+        String complement,
+        String instagram,
+        String bioPhrase,
+        String bioTitle,
+        String bio,
+        String productsTitle,
+        String productsSubtitle,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {}

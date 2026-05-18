@@ -18,6 +18,15 @@ public class ProducerMapper {
                 producer.getEmail(),
                 producer.getPhone(),
                 producer.getAddress(),
+                producer.getState(),
+                producer.getCity(),
+                producer.getComplement(),
+                producer.getInstagram(),
+                producer.getBioPhrase(),
+                producer.getBioTitle(),
+                producer.getBio(),
+                producer.getProductsTitle(),
+                producer.getProductsSubtitle(),
                 producer.getCreatedAt(),
                 producer.getUpdatedAt()
         );
@@ -32,6 +41,15 @@ public class ProducerMapper {
         producer.setEmail(dto.email());
         producer.setPhone(dto.phone());
         producer.setAddress(dto.address());
+        producer.setState(dto.state());
+        producer.setCity(dto.city());
+        producer.setComplement(dto.complement());
+        producer.setInstagram(dto.instagram());
+        producer.setBioPhrase(dto.bioPhrase());
+        producer.setBioTitle(dto.bioTitle());
+        producer.setBio(dto.bio());
+        producer.setProductsTitle(dto.productsTitle());
+        producer.setProductsSubtitle(dto.productsSubtitle());
         return producer;
     }
 
