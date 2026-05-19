@@ -1,30 +1,20 @@
 import { useNavigate } from "react-router";
-import { mergeRefs } from "react-merge-refs";
-import { useMask } from "@react-input/mask";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Leaf } from "@solar-icons/react";
 import logoDarkImg from "~/assets/logo-dark.svg";
 import backgroundImg from "~/assets/register-producer-background.jpg";
-import { Input } from "~/components/Input";
 import { Button } from "~/components/Button";
-import { Select } from "~/components/Select";
 import { registerSchema, type RegisterFormData } from "./consts";
+import { Form, FormInput, FormSelect } from "~/components/Form";
 
 export const RegisterProducer = () => {
-  const { register, formState, handleSubmit } = useForm<RegisterFormData>({
+  const navigate = useNavigate();
+
+  const formProps = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     reValidateMode: "onBlur",
   });
-
-  const { ref: phoneInputFormRef, ...phoneInputProps } = register("phone");
-  const phoneInputMaskRef = useMask({
-    mask: "(__) _____-____",
-    replacement: { _: /\d/ },
-  });
-  const phoneInputRef = mergeRefs([phoneInputFormRef, phoneInputMaskRef]);
-
-  const navigate = useNavigate();
 
   const onSubmit = (data: RegisterFormData) => {
     console.log(data);
@@ -78,55 +68,59 @@ export const RegisterProducer = () => {
             </p>
           </div>
 
-          <form
+          <Form
+            {...formProps}
+            onSubmit={onSubmit}
             className="pb-16 flex flex-col gap-6 w-full"
-            onSubmit={handleSubmit(onSubmit)}
           >
             <div className="w-full grid grid-cols-2 gap-6">
-              <Input
+              <FormInput
+                name="brandName"
                 label="Nome do Produtor(a) / Empresa"
                 placeholder="Ex: João Batista"
                 className="col-span-2"
-                error={formState.errors.name?.message}
-                {...register("name")}
               />
-              <Input
+              <FormInput
+                name="email"
                 label="E-mail"
                 placeholder="contato@seusitio.com.br"
-                error={formState.errors.email?.message}
-                {...register("email")}
               />
-              <Input
+              <FormInput
+                name="password"
                 label="Senha"
                 type="password"
                 placeholder="••••••••"
-                error={formState.errors.password?.message}
-                {...register("password")}
               />
-              <Select
+              <FormSelect
+                name="state"
                 label="Estado"
                 options={[{ label: "Rio Grande do Norte (RN)", value: "RN" }]}
               />
-              <Select
+              <FormSelect
+                name="city"
                 label="Cidade"
                 options={[{ label: "Natal (RN)", value: "Natal" }]}
               />
-              <Input
+              <FormInput
+                name="address"
                 label="Endereço"
                 placeholder="Ex: Rua das Flores, 123"
-                error={formState.errors.address?.message}
-                {...register("address")}
               />
-              <Input
-                ref={phoneInputRef}
+              <FormInput
+                name="phone"
                 label="Telefone"
-                placeholder="(99) 99999-9999"
-                error={formState.errors.phone?.message}
-                {...phoneInputProps}
+                mask={{
+                  mask: "(__) _____-____",
+                  replacement: { _: /\d/ },
+                }}
               />
             </div>
-            <Button label="Criar conta de produtor" solarIcon={ArrowRight} />
-          </form>
+            <Button
+              type="submit"
+              label="Criar conta de produtor"
+              solarIcon={ArrowRight}
+            />
+          </Form>
 
           <div className="flex justify-between items-center border-t border-t-[#C9A97A4D] pt-8">
             <p className="text-xs text-[#7A4E2D]">

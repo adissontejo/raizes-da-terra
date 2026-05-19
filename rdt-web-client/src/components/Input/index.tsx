@@ -1,3 +1,4 @@
+import { useMask, type MaskOptions } from "@react-input/mask";
 import { Eye } from "@solar-icons/react";
 import {
   forwardRef,
@@ -6,6 +7,7 @@ import {
   type DetailedHTMLProps,
   type InputHTMLAttributes,
 } from "react";
+import { mergeRefs } from "react-merge-refs";
 
 export interface InputProps extends DetailedHTMLProps<
   InputHTMLAttributes<HTMLInputElement>,
@@ -13,11 +15,15 @@ export interface InputProps extends DetailedHTMLProps<
 > {
   label?: string;
   error?: string;
+  mask?: MaskOptions;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, type, className, error, ...props }, ref) => {
+  ({ label, type, className, error, mask, ...props }, ref) => {
     const id = useId();
+
+    const maskRef = useMask(mask);
+    const inputRef = mergeRefs([ref, maskRef]);
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -32,7 +38,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           </label>
         )}
         <input
-          ref={ref}
+          ref={inputRef}
           id={id}
           type={showPassword ? "text" : type}
           {...props}

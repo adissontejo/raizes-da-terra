@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const profileSchema = z.object({
-  name: z
+  brandName: z
     .string()
     .nonempty("Preencha este campo")
     .min(3, "Mínimo 3 caracteres")

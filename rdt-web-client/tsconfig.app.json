@@ -23,7 +23,8 @@
     "strictNullChecks": true,
 
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "@api/*": ["./src/services/api/*"]
     }
   },
   "include": ["src"]

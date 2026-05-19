@@ -12,6 +12,7 @@ export interface SelectProps<T extends string | number> {
   value?: T;
   onChange?: (value: T) => void;
   placeholder?: string;
+  error?: string;
   className?: string;
 }
 
@@ -21,6 +22,7 @@ export const Select = <T extends string | number>({
   value,
   onChange,
   placeholder = "Selecione",
+  error,
   className,
 }: SelectProps<T>) => {
   const id = useId();
@@ -85,6 +87,10 @@ export const Select = <T extends string | number>({
           className={`transition-transform ${open ? "rotate-180" : ""}`}
         />
       </button>
+
+      {error && (
+        <p className="absolute -bottom-4 text-xs text-red-500">{error}</p>
+      )}
 
       {open && (
         <div
