@@ -7,4 +7,5 @@ ALTER TABLE producer
     ADD COLUMN bio_title TEXT,
     ADD COLUMN bio TEXT,
     ADD COLUMN products_title TEXT,
-    ADD COLUMN products_subtitle TEXT;
+    ADD COLUMN products_subtitle TEXT,
+    DROP COLUMN banner_url;
