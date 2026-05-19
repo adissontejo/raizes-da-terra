@@ -6,7 +6,6 @@ public record ProducerResponseDTO(
         Long id,
         String brandName,
         String profilePhotoUrl,
-        String bannerUrl,
         String cnpj,
         String email,
         String phone,

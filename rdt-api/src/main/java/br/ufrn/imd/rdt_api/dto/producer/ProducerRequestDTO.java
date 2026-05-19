@@ -8,11 +8,7 @@ public record ProducerRequestDTO (
     @Size(max = 255, message = "O nome da marca deve ter no máximo 255 caracteres.")
     String brandName,
 
-    @NotBlank(message = "A foto de perfil é obrigatória.")
     String profilePhotoUrl,
-
-    @NotBlank(message = "A foto de capa é obrigatória.")
-    String bannerUrl,
 
     @NotBlank(message = "O CNPJ é obrigatório.")
     @Pattern(regexp = "\\d{14}", message = "O CNPJ deve conter exatamente 14 dígitos numéricos.")
@@ -39,18 +35,13 @@ public record ProducerRequestDTO (
 
     String instagram,
 
-    @NotBlank(message = "A frase é obrigatória.")
     String bioPhrase,
 
-    @NotBlank(message = "O título da bio é obrigatório.")
     String bioTitle,
 
-    @NotBlank(message = "A bio é obrigatória.")
     String bio,
 
-    @NotBlank(message = "O título é obrigatória.")
     String productsTitle,
 
-    @NotBlank(message = "O subtítulo é obrigatório.")
     String productsSubtitle
 ) {}

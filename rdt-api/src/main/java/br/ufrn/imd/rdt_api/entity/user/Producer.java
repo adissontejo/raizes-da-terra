@@ -17,9 +17,6 @@ public class Producer {
     @Column(name = "profile_photo_url", columnDefinition = "TEXT")
     private String profilePhotoUrl;
 
-    @Column(name = "banner_url", columnDefinition = "TEXT")
-    private String bannerUrl;
-
     @Column(name = "cnpj", unique = true)
     private String cnpj;
 
@@ -86,9 +83,6 @@ public class Producer {
 
     public String getProfilePhotoUrl() { return profilePhotoUrl; }
     public void setProfilePhotoUrl(String profilePhotoUrl) { this.profilePhotoUrl = profilePhotoUrl; }
-
-    public String getBannerUrl() { return bannerUrl; }
-    public void setBannerUrl(String bannerUrl) { this.bannerUrl = bannerUrl; }
 
     public String getCnpj() { return cnpj; }
     public void setCnpj(String cnpj) { this.cnpj = cnpj; }
