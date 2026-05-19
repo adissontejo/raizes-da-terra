@@ -74,11 +74,19 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Generate GitHub Tag
+        with:
+          fetch-depth: 0
+
+      - name: Calculate Semantic Version and create Tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: patch
+
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ github.run_number }}
-          name: version ${{ github.run_number }}
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
           generate_release_notes: true
-
-
