@@ -1,4 +1,4 @@
-import { BagSmile, TrashBinTrash } from "@solar-icons/react";
+import { BagSmile, PenNewSquare, TrashBinTrash } from "@solar-icons/react";
 import { DefaultPic } from "~/components/DefaultPic";
 
 interface CatalogProductProps {
@@ -6,6 +6,8 @@ interface CatalogProductProps {
   name: string;
   price: number;
   imageSrc?: string;
+  onEdit: () => void;
+  onDelete: () => void;
 }
 
 export const CatalogProduct = ({
@@ -13,6 +15,8 @@ export const CatalogProduct = ({
   name,
   price,
   imageSrc,
+  onEdit,
+  onDelete,
 }: CatalogProductProps) => {
   return (
     <div className="w-full rounded-lg border border-[#C9A97A4D] flex items-center justify-between p-4 gap-4">
@@ -37,9 +41,20 @@ export const CatalogProduct = ({
           </p>
         </div>
       </div>
-      <button className="p-2 rounded-full text-argil hover:bg-[#C9A97A30] transition-colors">
-        <TrashBinTrash color="inherit" size={20} />
-      </button>
+      <div className="flex items-center px-4 gap-8">
+        <button
+          className="text-base-text hover:brightness-5 transition-all"
+          onClick={onEdit}
+        >
+          <PenNewSquare color="inherit" size={20} />
+        </button>
+        <button
+          className="text-argil hover:brightness-60 transition-all"
+          onClick={onDelete}
+        >
+          <TrashBinTrash color="inherit" size={20} />
+        </button>
+      </div>
     </div>
   );
 };

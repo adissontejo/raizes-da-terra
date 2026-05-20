@@ -13,6 +13,7 @@ export interface TextAreaProps extends DetailedHTMLProps<
   label?: string;
   error?: string;
   initialHeight?: number;
+  minHeight?: number;
 }
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
@@ -24,7 +25,8 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       className,
       error,
       onChange,
-      initialHeight = 60,
+      initialHeight = 100,
+      minHeight = 100,
       ...props
     },
     ref,
@@ -67,7 +69,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             transition-colors
             ${error ? "border-red-500" : "focus:border-base-hover"}
           `}
-          style={{ height: initialHeight }}
+          style={{ height: initialHeight, minHeight }}
         />
 
         {error && (

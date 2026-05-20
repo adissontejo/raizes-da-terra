@@ -12,6 +12,8 @@ import product1Img from "~/assets/product-1-temp.png";
 import product2Img from "~/assets/product-2-temp.png";
 import { PriceInput } from "~/components/PriceInput";
 import { newProductSchema, type NewProductFormData } from "./consts";
+import { EditProductModal } from "./EditProductModal";
+import { useState } from "react";
 
 export const ProductsManagement = () => {
   const { register, control, handleSubmit, formState } =
@@ -20,13 +22,15 @@ export const ProductsManagement = () => {
       reValidateMode: "onBlur",
     });
 
+  const [selectedProduct, setSelectedProduct] = useState<unknown | null>(null);
+
   return (
     <div className="w-full gap-16 flex flex-col">
       <form
         onSubmit={handleSubmit((data) => console.log(data))}
         className="w-full rounded-lg bg-[#C9A97A0D] border border-[#C9A97A4D] p-8 grid grid-cols-3 gap-8"
       >
-        <ImageUpload label="Imagem do Produto" className="w-full h-full" />
+        <ImageUpload label="Imagem do Produto" className="w-full" />
         <div className="w-full col-span-2 grid grid-cols-2 gap-5">
           <Input
             label="Nome do Produto"
@@ -83,15 +87,25 @@ export const ProductsManagement = () => {
             name="Goiabada Cascão de Corte"
             price={35.0}
             imageSrc={product1Img}
+            onEdit={() => setSelectedProduct(1)}
+            onDelete={() => []}
           />
           <CatalogProduct
             category="Doces & Geleias"
             name="Doce de Leite do Sítio"
             price={28.8}
             imageSrc={product2Img}
+            onEdit={() => setSelectedProduct(1)}
+            onDelete={() => []}
           />
         </div>
       </div>
+
+      <EditProductModal
+        product={selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+        onSave={() => setSelectedProduct(null)}
+      />
     </div>
   );
 };
