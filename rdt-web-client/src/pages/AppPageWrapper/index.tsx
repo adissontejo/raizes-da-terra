@@ -1,25 +1,9 @@
-import { Link } from "react-router";
 import logoImg from "~/assets/logo-dark.svg";
-import { ProfilePic } from "~/components/ProfilePic";
+import { DefaultPic } from "~/components/DefaultPic";
 
 // TO-DO: delete asset
 import pfpTemp from "~/assets/pfp-temp.png";
-
-interface NavButtonProps {
-  label: string;
-  to: string;
-}
-
-const NavButton = ({ label, to }: NavButtonProps) => {
-  return (
-    <Link
-      to={to}
-      className="text-sm text-clay hover:brightness-50 transition-[filter]"
-    >
-      {label}
-    </Link>
-  );
-};
+import { NavButton } from "./NavButton";
 
 export interface PageWrapperProps {
   children: React.ReactNode;
@@ -39,7 +23,7 @@ export const AppPageWrapper = ({ children }: PageWrapperProps) => {
             <span className="font-medium text-sm text-base-title">
               Dona Maria do Carmo
             </span>
-            <ProfilePic src={pfpTemp} className="size-8 rounded-full" />
+            <DefaultPic src={pfpTemp} className="size-8 rounded-full" />
           </button>
         </div>
       </header>
