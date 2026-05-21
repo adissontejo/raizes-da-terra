@@ -13,6 +13,7 @@ export interface SelectProps<T extends string | number> {
   onChange?: (value: T) => void;
   placeholder?: string;
   error?: string;
+  isLoading?: boolean;
   className?: string;
 }
 
@@ -23,6 +24,7 @@ export const Select = <T extends string | number>({
   onChange,
   placeholder = "Selecione",
   error,
+  isLoading,
   className,
 }: SelectProps<T>) => {
   const id = useId();
@@ -78,7 +80,7 @@ export const Select = <T extends string | number>({
         <span
           className={`${selected ? "text-base-title" : "text-[#7A4E2D80]"}`}
         >
-          {selected?.label || placeholder}
+          {isLoading ? "Carregando..." : selected?.label || placeholder}
         </span>
 
         <AltArrowDown
@@ -144,7 +146,7 @@ export const Select = <T extends string | number>({
               ))
             ) : (
               <div className="px-4 py-2 text-sm text-[#7A4E2D80]">
-                Nenhum resultado
+                {isLoading ? "Carregando..." : "Nenhum resultado"}
               </div>
             )}
           </div>

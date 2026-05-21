@@ -1,4 +1,4 @@
-import { Form, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "~/components/Button";
 import { ImageUpload } from "~/components/ImageUpload";
@@ -11,7 +11,12 @@ import product2Img from "~/assets/product-2-temp.png";
 import { newProductSchema, type NewProductFormData } from "./consts";
 import { EditProductModal } from "./EditProductModal";
 import { useState } from "react";
-import { FormPriceInput, FormSelect, FormTextArea } from "~/components/Form";
+import {
+  Form,
+  FormPriceInput,
+  FormSelect,
+  FormTextArea,
+} from "~/components/Form";
 
 export const ProductsManagement = () => {
   const formProps = useForm<NewProductFormData>({

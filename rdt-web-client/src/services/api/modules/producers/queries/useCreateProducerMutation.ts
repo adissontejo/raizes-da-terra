@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { producerKeys } from "../query-keys";
-import { ProducersService } from "../services/producers.service";
+import { producersKeys } from "../query-keys";
+import { ProducersService } from "../producers.service";
 import type { CreateProducerDTO } from "../dtos/create-producer.dto";
 
 export const useCreateProducerMutation = () => {
@@ -11,11 +11,11 @@ export const useCreateProducerMutation = () => {
       ProducersService.createProducer(variables.producer),
     onSuccess: (result) => {
       queryClient.invalidateQueries({
-        queryKey: producerKeys.get(),
+        queryKey: producersKeys.get(),
         exact: true,
       });
       queryClient.invalidateQueries({
-        queryKey: producerKeys.getById(result.id),
+        queryKey: producersKeys.getById(result.id),
         exact: true,
       });
     },

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ProducersService } from "../services/producers.service";
-import { producerKeys } from "../query-keys";
+import { ProducersService } from "../producers.service";
+import { producersKeys } from "../query-keys";
 
 export const useDeleteProducerMutation = () => {
   const queryClient = useQueryClient();
@@ -10,11 +10,11 @@ export const useDeleteProducerMutation = () => {
       ProducersService.deleteProducer(variables.id),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: producerKeys.get(),
+        queryKey: producersKeys.get(),
         exact: true,
       });
       queryClient.invalidateQueries({
-        queryKey: producerKeys.getById(variables.id),
+        queryKey: producersKeys.getById(variables.id),
         exact: true,
       });
     },

@@ -1,5 +1,7 @@
 import { Controller, useFormContext } from "react-hook-form";
 import { Select, type SelectProps } from "../Select";
+import { useContext } from "react";
+import { FormDataContext } from "./consts";
 
 export interface FormSelectProps<
   T extends string | number,
@@ -9,9 +11,11 @@ export interface FormSelectProps<
 
 export const FormSelect = <T extends string | number>({
   name,
+  isLoading,
   ...props
 }: FormSelectProps<T>) => {
   const { control, formState } = useFormContext();
+  const { isLoading: isFormLoading } = useContext(FormDataContext);
 
   return (
     <Controller
@@ -22,6 +26,7 @@ export const FormSelect = <T extends string | number>({
           {...field}
           {...props}
           error={formState.errors[name]?.message?.toString()}
+          isLoading={isLoading || isFormLoading}
         />
       )}
     />

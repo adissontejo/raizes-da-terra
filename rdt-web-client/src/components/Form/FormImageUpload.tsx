@@ -1,18 +1,18 @@
 import { Controller, useFormContext } from "react-hook-form";
-import { PriceInput, type PriceInputProps } from "../PriceInput";
 import { useContext } from "react";
 import { FormDataContext } from "./consts";
+import { ImageUpload, type ImageUploadProps } from "../ImageUpload";
 
-export interface FormPriceInputProps extends PriceInputProps {
+export interface FormImageUploadProps extends ImageUploadProps {
   name: string;
 }
 
-export const FormPriceInput = ({
+export const FormImageUpload = ({
   name,
   isLoading,
   ...props
-}: FormPriceInputProps) => {
-  const { control, formState } = useFormContext();
+}: FormImageUploadProps) => {
+  const { control } = useFormContext();
   const { isLoading: isFormLoading } = useContext(FormDataContext);
 
   return (
@@ -20,10 +20,9 @@ export const FormPriceInput = ({
       control={control}
       name={name}
       render={({ field }) => (
-        <PriceInput
+        <ImageUpload
           {...field}
           {...props}
-          error={formState.errors[name]?.message?.toString()}
           isLoading={isLoading || isFormLoading}
         />
       )}

@@ -4,24 +4,29 @@ import {
   type FieldValues,
   type UseFormReturn,
 } from "react-hook-form";
+import { FormDataContext } from "./consts";
 
 export interface FormProps<T extends FieldValues> extends UseFormReturn<T> {
   children?: ReactNode;
   className?: string;
-  onSubmit: (data: T) => void;
+  onSubmit?: (data: T) => void;
+  isLoading?: boolean;
 }
 
 export const Form = <T extends FieldValues>({
   children,
   className,
-  onSubmit,
+  onSubmit = () => [],
+  isLoading = false,
   ...props
 }: FormProps<T>) => {
   return (
     <FormProvider {...props}>
-      <form className={className} onSubmit={props.handleSubmit(onSubmit)}>
-        {children}
-      </form>
+      <FormDataContext.Provider value={{ isLoading }}>
+        <form className={className} onSubmit={props.handleSubmit(onSubmit)}>
+          {children}
+        </form>
+      </FormDataContext.Provider>
     </FormProvider>
   );
 };

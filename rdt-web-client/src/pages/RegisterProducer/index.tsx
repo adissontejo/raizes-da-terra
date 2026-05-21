@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Leaf } from "@solar-icons/react";
 import logoDarkImg from "~/assets/logo-dark.svg";
@@ -7,6 +7,12 @@ import backgroundImg from "~/assets/register-producer-background.jpg";
 import { Button } from "~/components/Button";
 import { registerSchema, type RegisterFormData } from "./consts";
 import { Form, FormInput, FormSelect } from "~/components/Form";
+import { useGetStatesQuery } from "~/services/ibgeApi/modules/locations/states/queries/useGetStatesQuery";
+import { useGetCitiesByStateQuery } from "~/services/ibgeApi/modules/locations/states/queries/useGetCitiesByStateQuery";
+import { useMemo } from "react";
+import { useCreateProducerMutation } from "~/services/api/modules/producers/queries/useCreateProducerMutation";
+import { storeProducerId } from "~/store/producer";
+import { toast } from "react-toastify";
 
 export const RegisterProducer = () => {
   const navigate = useNavigate();
@@ -15,11 +21,54 @@ export const RegisterProducer = () => {
     resolver: zodResolver(registerSchema),
     reValidateMode: "onBlur",
   });
+  const selectedState = useWatch({
+    name: "state",
+    control: formProps.control,
+  });
+
+  const { data: states, isLoading: isLoadingStates } = useGetStatesQuery();
+  const { data: cities, isLoading: isLoadingCities } =
+    useGetCitiesByStateQuery(selectedState);
+  const { mutate: createProducer } = useCreateProducerMutation();
+
+  const stateOptions = useMemo(() => {
+    return (
+      states
+        ?.map((state) => ({
+          label: state.nome,
+          value: state.sigla,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label)) ?? []
+    );
+  }, [states]);
+
+  const cityOptions = useMemo(() => {
+    return (
+      cities
+        ?.map((city) => ({
+          label: city.nome,
+          value: city.nome,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label)) ?? []
+    );
+  }, [cities]);
 
   const onSubmit = (data: RegisterFormData) => {
-    console.log(data);
+    createProducer(
+      { producer: data },
+      {
+        onSuccess: (result) => {
+          storeProducerId(result.id);
 
-    navigate("/configuracoes-produtor");
+          toast.success("Cadastro realizado com sucesso!");
+
+          navigate("/configuracoes-produtor");
+        },
+        onError: () => {
+          toast.error("Erro ao realizar cadastro.");
+        },
+      },
+    );
   };
 
   return (
@@ -78,7 +127,15 @@ export const RegisterProducer = () => {
                 name="brandName"
                 label="Nome do Produtor(a) / Empresa"
                 placeholder="Ex: João Batista"
-                className="col-span-2"
+              />
+              <FormInput
+                name="cnpj"
+                label="CNPJ"
+                placeholder="00.000.000/0000-00"
+                mask={{
+                  mask: "__.___.___/____-__",
+                  replacement: { _: /\d/ },
+                }}
               />
               <FormInput
                 name="email"
@@ -94,12 +151,14 @@ export const RegisterProducer = () => {
               <FormSelect
                 name="state"
                 label="Estado"
-                options={[{ label: "Rio Grande do Norte (RN)", value: "RN" }]}
+                options={stateOptions}
+                isLoading={isLoadingStates}
               />
               <FormSelect
                 name="city"
                 label="Cidade"
-                options={[{ label: "Natal (RN)", value: "Natal" }]}
+                options={cityOptions}
+                isLoading={isLoadingCities}
               />
               <FormInput
                 name="address"
@@ -109,6 +168,7 @@ export const RegisterProducer = () => {
               <FormInput
                 name="phone"
                 label="Telefone"
+                placeholder="(99) 99999-9999"
                 mask={{
                   mask: "(__) _____-____",
                   replacement: { _: /\d/ },

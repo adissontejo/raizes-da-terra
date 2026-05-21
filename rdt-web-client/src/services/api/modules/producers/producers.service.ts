@@ -1,7 +1,7 @@
 import { api } from "@api/client";
-import type { ProducerDTO } from "../dtos/producer.dto";
-import type { CreateProducerDTO } from "../dtos/create-producer.dto";
-import type { UpdateProducerDTO } from "../dtos/update-producer.dto";
+import type { ProducerDTO } from "./dtos/producer.dto";
+import type { CreateProducerDTO } from "./dtos/create-producer.dto";
+import type { UpdateProducerDTO } from "./dtos/update-producer.dto";
 
 export class ProducersService {
   public static async getProducers(): Promise<ProducerDTO[]> {

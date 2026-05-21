@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { producerKeys } from "../query-keys";
-import { ProducersService } from "../services/producers.service";
+import { producersKeys } from "../query-keys";
+import { ProducersService } from "../producers.service";
 
 export const useGetProducersQuery = () => {
   return useQuery({
-    queryKey: producerKeys.get(),
+    queryKey: producersKeys.get(),
     queryFn: ProducersService.getProducers,
   });
 };

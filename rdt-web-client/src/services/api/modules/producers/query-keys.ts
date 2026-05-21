@@ -1,5 +1,5 @@
-export const producerKeys = {
+export const producersKeys = {
   base: ["producers"] as const,
-  get: () => [...producerKeys.base, "all"] as const,
-  getById: (id: number) => [...producerKeys.base, id] as const,
+  get: () => [...producersKeys.base, "all"] as const,
+  getById: (id: Nullable<number>) => [...producersKeys.base, id] as const,
 };

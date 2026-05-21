@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { producerKeys } from "../query-keys";
-import { ProducersService } from "../services/producers.service";
+import { producersKeys } from "../query-keys";
+import { ProducersService } from "../producers.service";
 
-export const useGetProducerByIdQuery = (id: number) => {
+export const useGetProducerByIdQuery = (id: Nullable<number>) => {
   return useQuery({
-    queryKey: producerKeys.getById(id),
-    queryFn: () => ProducersService.getProducerById(id),
+    queryKey: producersKeys.getById(id),
+    queryFn: () => ProducersService.getProducerById(id!),
+    enabled: typeof id === "number",
   });
 };

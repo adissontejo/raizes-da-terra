@@ -12,7 +12,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_NAME:-raizes_da_terra}"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_NAME:-raizes_da_terra}",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -41,7 +45,11 @@ services:
     volumes:
       - ${UPLOAD_PATH:-./uploads}:/app/uploads
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep -q '\"status\":\"UP\"'"]
+      test:
+        [
+          "CMD-SHELL",
+          'wget -qO- http://localhost:8080/actuator/health | grep -q ''"status":"UP"''',
+        ]
       interval: 15s
       timeout: 5s
       retries: 5
@@ -57,6 +65,8 @@ services:
     depends_on:
       rdt-api:
         condition: service_healthy
+    environment:
+      - VITE_SERVER_URL="rdt-api:8080"
     ports:
       - "${WEB_PORT:-3000}:8080"
 
