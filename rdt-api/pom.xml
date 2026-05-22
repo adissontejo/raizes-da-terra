@@ -75,31 +75,26 @@
 	</dependencies>
 
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-            <plugin>
+        <plugins>
+	    	<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>3.3.1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>10.12.0</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
-                    <configLocation>google_checks.xml</configLocation>
-                    <consoleOutput>true</consoleOutput>
+                    <configLocation>checkstyle.xml</configLocation>
+                    <failOnViolation>true</failOnViolation>
                     <failsOnError>true</failsOnError>
+                    <consoleOutput>true</consoleOutput>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>validate</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
-		</plugins>
+        </plugins>
 	</build>
 
 </project>
