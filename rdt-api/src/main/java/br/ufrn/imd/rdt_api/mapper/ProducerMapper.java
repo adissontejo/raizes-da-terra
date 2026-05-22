@@ -54,5 +54,18 @@ public class ProducerMapper {
     public void updateEntity(Producer producer, ProducerRequestDTO dto) {
         producer.setBrandName(dto.brandName());
         producer.setProfilePhotoUrl(dto.profilePhotoUrl());
+        producer.setCnpj(dto.cnpj());
+        producer.setEmail(dto.email());
+        producer.setPhone(dto.phone());
+        producer.setAddress(dto.address());
+        producer.setState(dto.state());
+        producer.setCity(dto.city());
+        producer.setComplement(dto.complement());
+        producer.setInstagram(dto.instagram());
+        producer.setBioPhrase(dto.bioPhrase());
+        producer.setBioTitle(dto.bioTitle());
+        producer.setBio(dto.bio());
+        producer.setProductsTitle(dto.productsTitle());
+        producer.setProductsSubtitle(dto.productsSubtitle());
     }
 }
