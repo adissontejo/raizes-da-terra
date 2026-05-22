@@ -14,6 +14,7 @@ export interface TextAreaProps extends DetailedHTMLProps<
   error?: string;
   initialHeight?: number;
   minHeight?: number;
+  isLoading?: boolean;
 }
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
@@ -21,12 +22,14 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     {
       label,
       value,
+      placeholder,
       maxLength,
       className,
       error,
       onChange,
       initialHeight = 100,
       minHeight = 100,
+      isLoading,
       ...props
     },
     ref,
@@ -57,7 +60,9 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         <textarea
           ref={ref}
           id={id}
-          value={value}
+          value={isLoading ? undefined : value}
+          placeholder={isLoading ? "Carregando..." : placeholder}
+          disabled={isLoading}
           maxLength={maxLength}
           onChange={handleChange}
           {...props}
