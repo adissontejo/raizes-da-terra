@@ -1,17 +1,23 @@
 import { Shop } from "@solar-icons/react";
+import type { Icon } from "@solar-icons/react/lib/types";
 
-export interface ProfilePicProps {
+export interface DefaultPicProps {
   src?: string;
+  icon?: Icon;
   className?: string;
 }
 
-export const ProfilePic = ({ src, className }: ProfilePicProps) => {
+export const DefaultPic = ({
+  src,
+  icon: Icon = Shop,
+  className,
+}: DefaultPicProps) => {
   if (!src) {
     return (
       <div
         className={`${className} bg-[#C9A97A33] text-argil flex items-center justify-center p-1.5`}
       >
-        <Shop className="size-full max-w-8 max-h-8" color="currentColor" />
+        <Icon className="size-full max-w-8 max-h-8" color="currentColor" />
       </div>
     );
   }

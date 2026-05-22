@@ -28,7 +28,14 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    env_file: .env.api
+    environment:
+      APP_NAME: ${APP_NAME:-raizes-da-terra-api}
+      APP_STORAGE_UPLOAD_DIR: /app/uploads
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-raizes_da_terra}
+      DB_USERNAME: ${DB_USERNAME:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
     ports:
       - "${API_PORT:-8080}:8080"
     volumes:
@@ -44,8 +51,6 @@ services:
     build:
       context: ./rdt-web-client
       dockerfile: Dockerfile
-      args:
-        VITE_API_URL: ${VITE_API_URL:-/api}
     image: rdt-web-client:latest
     container_name: rdt-web-client
     restart: unless-stopped
