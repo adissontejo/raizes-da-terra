@@ -83,6 +83,6 @@ public class ProductService {
     }
 
     public void testMethod() {
-        // Test method with exactly one hundred and nine real characters in this comment line for checkstyle
+        // Test method with exactly one hundred and nine real characters in this comment line for checkstyle jdasjdasjdas asdkadkasdkas kdaskasd
     }
 }
