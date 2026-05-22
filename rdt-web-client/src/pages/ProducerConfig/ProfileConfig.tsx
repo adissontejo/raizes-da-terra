@@ -1,117 +1,209 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMask } from "@react-input/mask";
-import { mergeRefs } from "react-merge-refs";
-import { DefaultPic } from "~/components/DefaultPic";
-// TO-DO: delete asset
-import pfpTemp from "~/assets/pfp-temp.png";
 import { Button } from "~/components/Button";
-import { Input } from "~/components/Input";
-import { Select } from "~/components/Select";
-import { TextArea } from "~/components/TextArea";
 import { profileSchema, type ProfileFormData } from "./consts";
+import {
+  Form,
+  FormImageUpload,
+  FormInput,
+  FormSelect,
+  FormTextArea,
+} from "~/components/Form";
+import { useGetStatesQuery } from "~/services/ibgeApi/modules/locations/states/queries/useGetStatesQuery";
+import { useGetCitiesByStateQuery } from "~/services/ibgeApi/modules/locations/states/queries/useGetCitiesByStateQuery";
+import { useEffect, useMemo, useRef } from "react";
+import { retrieveProducerId } from "~/store/producer";
+import { Navigate } from "react-router";
+import { useGetProducerByIdQuery } from "~/services/api/modules/producers/queries/useGetProducerByIdQuery";
+import { useUpdateProducerMutation } from "~/services/api/modules/producers/queries/useUpdateProducerMutation";
+import { toast } from "react-toastify";
+import { UploadsService } from "~/services/api/modules/uploads/uploads.service";
+import type { UpdateProducerDTO } from "~/services/api/modules/producers/dtos/update-producer.dto";
 
 export const ProfileConfig = () => {
-  const { register, handleSubmit, formState, reset } = useForm<ProfileFormData>(
-    {
-      resolver: zodResolver(profileSchema),
-      reValidateMode: "onBlur",
-      defaultValues: {
-        name: "Dona Maria do Carmo",
-        email: "contato@donamariadoces.com.br",
-        state: "RN",
-        city: "São Gonçalo do Amarante",
-        address: "Sítio Cajueiro",
-        complement: "",
-        phone: "(84) 99999-9999",
-        instagram: "",
-        bioPhrase:
-          "Mãos que preservam a receita original da goiabada cascão...",
-        bioTitle: "O tempo certo do fogo e do afeto.",
-        bio: "Tudo começou com o tacho que era da minha avó...",
-        productsTitle: "Feito no tacho de cobre",
-        productsSubtitle:
-          "As receitas que atravessaram gerações no Sítio Cajueiro.",
-      },
-    },
-  );
+  const producerId = retrieveProducerId();
 
-  const { ref: phoneFormRef, ...phoneProps } = register("phone");
-  const maskRef = useMask({
-    mask: "(__) _____-____",
-    replacement: { _: /\d/ },
+  const formProps = useForm<ProfileFormData>({
+    resolver: zodResolver(profileSchema),
+    reValidateMode: "onBlur",
   });
-  const phoneRef = mergeRefs([phoneFormRef, maskRef]);
 
-  const onSubmit = (data: ProfileFormData) => {
-    reset(data);
+  const selectedState = useWatch({
+    name: "state",
+    control: formProps.control,
+  });
+
+  const {
+    data: producer,
+    isLoading: isLoadingProducer,
+    isError,
+  } = useGetProducerByIdQuery(producerId);
+  const { data: states, isLoading: isLoadingStates } = useGetStatesQuery();
+  const { data: cities, isLoading: isLoadingCities } =
+    useGetCitiesByStateQuery(selectedState);
+  const { mutate: updateProducer } = useUpdateProducerMutation();
+
+  const imageUploadRef = useRef<HTMLInputElement>(null);
+
+  const stateOptions = useMemo(() => {
+    return (
+      states
+        ?.map((state) => ({
+          label: state.nome,
+          value: state.sigla,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label)) ?? []
+    );
+  }, [states]);
+
+  const cityOptions = useMemo(() => {
+    return (
+      cities
+        ?.map((city) => ({
+          label: city.nome,
+          value: city.nome,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label)) ?? []
+    );
+  }, [cities]);
+
+  useEffect(() => {
+    if (producer) {
+      formProps.reset({
+        ...producer,
+        phone:
+          producer.phone?.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3") ?? "",
+        cnpj:
+          producer.cnpj?.replace(
+            /(\d{2})(\d{3})(\d{3})(\d{4})/,
+            "$1.$2.$3/$4-",
+          ) ?? "",
+        profilePhotoFile: undefined,
+      });
+    }
+  }, [producer]);
+
+  const onSubmit = async (data: ProfileFormData) => {
+    const producer: UpdateProducerDTO = {
+      ...data,
+    };
+
+    const profilePhotoFile = formProps.getValues("profilePhotoFile");
+
+    if (profilePhotoFile) {
+      try {
+        const { url } = await UploadsService.uploadImage(profilePhotoFile);
+
+        producer.profilePhotoUrl = `${import.meta.env.VITE_SERVER_URL}${url}`;
+      } catch {
+        toast.error("Erro ao enviar imagem. Tente novamente mais tarde.");
+
+        return;
+      }
+    }
+
+    updateProducer(
+      { id: producerId!, producer },
+      {
+        onSuccess: () => {
+          toast.success("Perfil atualizado com sucesso!");
+        },
+        onError: () => {
+          toast.error("Erro ao atualizar perfil.");
+        },
+      },
+    );
   };
 
+  if (typeof producerId !== "number" || isError) {
+    return <Navigate to="/" />;
+  }
+
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
+    <Form
+      {...formProps}
+      onSubmit={onSubmit}
       className="w-full rounded-xs border border-[#C9A97A4D] p-8 flex flex-col gap-8"
+      isLoading={isLoadingProducer}
     >
       <div className="w-full flex items-center justify-start gap-6">
-        <DefaultPic src={pfpTemp} className="size-24 rounded-full" />
+        <FormImageUpload
+          ref={imageUploadRef}
+          name="profilePhotoFile"
+          preselectedSrc={producer?.profilePhotoUrl ?? undefined}
+          className="w-24 h-24"
+          circular
+          uploadText={false}
+          isLoading={isLoadingProducer}
+        />
         <div className="flex flex-col gap-1">
-          <Button label="Alterar foto" className="h-8" />
+          <Button
+            type="button"
+            label="Alterar foto"
+            className="h-8"
+            disabled={isLoadingProducer}
+            onClick={() => imageUploadRef.current?.click()}
+          />
           <p className="text-xs text-clay">JPG, GIF ou PNG. Máximo de 2MB.</p>
         </div>
       </div>
 
       <div className="w-full grid grid-cols-2 gap-6">
-        <Input
+        <FormInput
+          name="brandName"
           label="Nome do Produtor(a) / Empresa"
           placeholder="Ex: João Batista"
-          error={formState.errors.name?.message}
-          {...register("name")}
         />
-        <Input
+        <FormInput
+          name="cnpj"
+          label="CNPJ"
+          placeholder="00.000.000/0000-00"
+          mask={{
+            mask: "__.___.___/____-__",
+            replacement: { _: /\d/ },
+          }}
+        />
+        <FormInput
+          name="email"
           label="E-mail"
           placeholder="contato@seusitio.com"
-          error={formState.errors.email?.message}
-          {...register("email")}
         />
-        <Select
+        <FormSelect
+          name="state"
           label="Estado"
-          value="RN"
-          options={[{ label: "Rio Grande do Norte (RN)", value: "RN" }]}
+          options={stateOptions}
+          isLoading={isLoadingStates}
         />
-        <Select
+        <FormSelect
+          name="city"
           label="Cidade"
-          value="São Gonçalo do Amarante"
-          options={[
-            {
-              label: "São Gonçalo do Amarante",
-              value: "São Gonçalo do Amarante",
-            },
-          ]}
+          options={cityOptions}
+          isLoading={isLoadingCities}
         />
-        <Input
+        <FormInput
+          name="address"
           label="Endereço"
           placeholder="Ex: Rua das Flores, 123"
-          error={formState.errors.address?.message}
-          {...register("address")}
         />
-        <Input
+        <FormInput
+          name="complement"
           label="Complemento"
           placeholder="(Opcional)"
-          {...register("complement")}
         />
-        <Input
-          ref={phoneRef}
+        <FormInput
+          name="phone"
           label="Telefone"
           placeholder="(99) 99999-9999"
-          error={formState.errors.phone?.message}
-          {...phoneProps}
+          mask={{
+            mask: "(__) _____-____",
+            replacement: { _: /\d/ },
+          }}
         />
-        <Input
+        <FormInput
+          name="instagram"
           label="Instagram"
           placeholder="(Opcional)"
-          {...register("instagram")}
         />
-        <Select label="Categorias de Produtos" className="col-span-2" />
       </div>
 
       <div className="w-full flex flex-col gap-12">
@@ -125,49 +217,53 @@ export const ProfileConfig = () => {
         </div>
 
         <div className="w-full grid grid-cols-2 gap-6 pb-24">
-          <TextArea
+          <FormTextArea
+            name="bioPhrase"
             label="Qual frase melhor descreve sua marca?"
             maxLength={250}
             initialHeight={70}
             placeholder="Ex: A tradição que vem do coração."
             className="col-span-2"
-            error={formState.errors.bioPhrase?.message}
-            {...register("bioPhrase")}
           />
-          <Input
+          <FormInput
+            name="bioTitle"
             label="Crie um título curto para sua biografia"
             placeholder="Ex: Artesão do Cobre"
             className="col-span-2"
-            error={formState.errors.bioTitle?.message}
-            {...register("bioTitle")}
           />
-          <TextArea
+          <FormTextArea
+            name="bio"
             label="Conte a história da marca"
             maxLength={500}
             initialHeight={300}
             placeholder="Tudo começou quando..."
             className="col-span-2"
-            error={formState.errors.bio?.message}
-            {...register("bio")}
           />
-          <Input
+          <FormInput
+            name="productsTitle"
             label="Crie um título para sessão de produtos"
             placeholder="Ex: Nossos Produtos"
-            error={formState.errors.productsTitle?.message}
-            {...register("productsTitle")}
           />
-          <Input
+          <FormInput
+            name="productsSubtitle"
             label="Crie um subtítulo para sessão de produtos"
             placeholder="Ex: Nossos Produtos"
-            error={formState.errors.productsSubtitle?.message}
-            {...register("productsSubtitle")}
           />
         </div>
       </div>
 
       <div className="w-full border-t border-t-[#C9A97A4D] pt-4 flex justify-end">
-        <Button label="Salvar alterações" disabled={!formState.isDirty} />
+        <Button
+          type="submit"
+          label="Salvar alterações"
+          disabled={
+            !formProps.formState.isDirty ||
+            isLoadingProducer ||
+            isLoadingCities ||
+            isLoadingStates
+          }
+        />
       </div>
-    </form>
+    </Form>
   );
 };

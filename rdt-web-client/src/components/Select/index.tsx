@@ -12,6 +12,8 @@ export interface SelectProps<T extends string | number> {
   value?: T;
   onChange?: (value: T) => void;
   placeholder?: string;
+  error?: string;
+  isLoading?: boolean;
   className?: string;
 }
 
@@ -21,6 +23,8 @@ export const Select = <T extends string | number>({
   value,
   onChange,
   placeholder = "Selecione",
+  error,
+  isLoading,
   className,
 }: SelectProps<T>) => {
   const id = useId();
@@ -76,7 +80,7 @@ export const Select = <T extends string | number>({
         <span
           className={`${selected ? "text-base-title" : "text-[#7A4E2D80]"}`}
         >
-          {selected?.label || placeholder}
+          {isLoading ? "Carregando..." : selected?.label || placeholder}
         </span>
 
         <AltArrowDown
@@ -85,6 +89,10 @@ export const Select = <T extends string | number>({
           className={`transition-transform ${open ? "rotate-180" : ""}`}
         />
       </button>
+
+      {error && (
+        <p className="absolute -bottom-4 text-xs text-red-500">{error}</p>
+      )}
 
       {open && (
         <div
@@ -138,7 +146,7 @@ export const Select = <T extends string | number>({
               ))
             ) : (
               <div className="px-4 py-2 text-sm text-[#7A4E2D80]">
-                Nenhum resultado
+                {isLoading ? "Carregando..." : "Nenhum resultado"}
               </div>
             )}
           </div>
