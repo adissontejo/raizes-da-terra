@@ -17,6 +17,7 @@ import {
   FormSelect,
   FormTextArea,
 } from "~/components/Form";
+import { DeleteProductModal } from "./DeleteProductModal";
 
 export const ProductsManagement = () => {
   const formProps = useForm<NewProductFormData>({
@@ -24,7 +25,8 @@ export const ProductsManagement = () => {
     reValidateMode: "onBlur",
   });
 
-  const [selectedProduct, setSelectedProduct] = useState<unknown | null>(null);
+  const [editProduct, setEditProduct] = useState<unknown | null>(null);
+  const [deleteProduct, setDeleteProduct] = useState<unknown | null>(null);
 
   return (
     <div className="w-full gap-16 flex flex-col">
@@ -78,24 +80,30 @@ export const ProductsManagement = () => {
             name="Goiabada Cascão de Corte"
             price={35.0}
             imageSrc={product1Img}
-            onEdit={() => setSelectedProduct(1)}
-            onDelete={() => []}
+            onEdit={() => setEditProduct(1)}
+            onDelete={() => setDeleteProduct(1)}
           />
           <CatalogProduct
             category="Doces & Geleias"
             name="Doce de Leite do Sítio"
             price={28.8}
             imageSrc={product2Img}
-            onEdit={() => setSelectedProduct(1)}
-            onDelete={() => []}
+            onEdit={() => setEditProduct(1)}
+            onDelete={() => setDeleteProduct(1)}
           />
         </div>
       </div>
 
       <EditProductModal
-        product={selectedProduct}
-        onClose={() => setSelectedProduct(null)}
-        onSave={() => setSelectedProduct(null)}
+        product={editProduct}
+        onClose={() => setEditProduct(null)}
+        onSave={() => setEditProduct(null)}
+      />
+
+      <DeleteProductModal
+        product={deleteProduct}
+        onClose={() => setDeleteProduct(null)}
+        onConfirm={() => setDeleteProduct(null)}
       />
     </div>
   );
