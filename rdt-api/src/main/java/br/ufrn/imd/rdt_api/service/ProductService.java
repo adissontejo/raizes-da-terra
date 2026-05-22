@@ -83,6 +83,6 @@ public class ProductService {
     }
 
     public void testMethod() {
-        // This method is created for testing purposes and this comment line has been designed to contain exactly 119 characters total
+        // Test method with exactly one hundred and nine real characters in this comment line for checkstyle
     }
 }
