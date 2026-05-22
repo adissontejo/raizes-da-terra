@@ -14,10 +14,7 @@ export const useCreateProducerMutation = () => {
         queryKey: producersKeys.get(),
         exact: true,
       });
-      queryClient.invalidateQueries({
-        queryKey: producersKeys.getById(result.id),
-        exact: true,
-      });
+      queryClient.setQueryData(producersKeys.getById(result.id), result);
     },
   });
 };

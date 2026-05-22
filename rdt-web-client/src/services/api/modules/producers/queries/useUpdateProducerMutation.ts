@@ -14,11 +14,7 @@ export const useUpdateProducerMutation = () => {
             queryKey: producersKeys.get(),
             exact: true,
           });
-          queryClient.setQueryData(producersKeys.getById(variables.id), {
-            // TO-DO: change it to use result when update is fixed
-            ...queryClient.getQueryData(producersKeys.getById(variables.id)),
-            ...variables.producer,
-          });
+          queryClient.setQueryData(producersKeys.getById(variables.id), result);
 
           return result;
         },
