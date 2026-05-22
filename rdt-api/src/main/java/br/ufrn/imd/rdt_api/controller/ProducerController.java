@@ -3,8 +3,6 @@ import br.ufrn.imd.rdt_api.dto.ApiResponse;
 import br.ufrn.imd.rdt_api.dto.producer.ProducerRequestDTO;
 import br.ufrn.imd.rdt_api.dto.producer.ProducerResponseDTO;
 import br.ufrn.imd.rdt_api.entity.user.Producer;
-import br.ufrn.imd.rdt_api.mapper.ProducerMapper;
-import br.ufrn.imd.rdt_api.repository.ProducerRepository;
 import br.ufrn.imd.rdt_api.service.ProducerService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

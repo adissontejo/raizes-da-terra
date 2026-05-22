@@ -31,7 +31,11 @@ public class GlobalExceptionHandler {
                 .map(e -> new ApiError.FieldError(e.getField(), e.getDefaultMessage()))
                 .toList();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiError.of(400, "Bad Request", "Erro de validação nos campos enviados.", request.getRequestURI(), fields));
+                .body(ApiError.of(400,
+                        "Bad Request",
+                        "Erro de validação nos campos enviados.",
+                        request.getRequestURI(), fields)
+                );
     }
 
     @ExceptionHandler(InvalidFileException.class)
