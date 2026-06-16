@@ -10,6 +10,8 @@ import br.ufrn.imd.rdt_api.repository.ProducerRepository;
 
 import java.util.List;
 
+import br.ufrn.imd.rdt_api.specification.ProducerSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +27,9 @@ public class ProducerService {
         this.mapper = mapper;
     }
 
-    public List<ProducerResponseDTO> findAll() {
-        return producerRepository.findAll().stream()
+    public List<ProducerResponseDTO> findAll(String search) {
+        Specification<Producer> spec = ProducerSpecification.search(search);
+        return producerRepository.findAll(spec).stream()
                 .map(mapper::toResponse)
                 .toList();
     }

@@ -21,8 +21,9 @@ public class ProducerController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ProducerResponseDTO>>> findAll() {
-        return ResponseEntity.ok(ApiResponse.ok(service.findAll()));
+    public ResponseEntity<ApiResponse<List<ProducerResponseDTO>>> findAll(
+            @RequestParam(required = false) String search) {
+        return ResponseEntity.ok(ApiResponse.ok(service.findAll(search)));
     }
 
     @GetMapping("/{id}")
