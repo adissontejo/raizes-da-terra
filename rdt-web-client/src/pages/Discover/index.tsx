@@ -4,18 +4,10 @@ import { ProducerCard, type ProducerCardProps } from "./ProducerCard";
 import { ProductCard, type ProductCardProps } from "./ProductCard";
 import { useGetProducersQuery } from "~/services/api/modules/producers/queries/useGetProducersQuery";
 import { useGetProductsQuery } from "~/services/api/modules/products/queries/useGetProductsQuery";
+import { useGetCategoriesQuery } from "~/services/api/modules/categories/queries/useGetCategoriesQuery";
 
 const COLS_PRODUTORES = 3;
 const COLS_PRODUTOS = 4;
-
-const categories = [
-  "Todos",
-  "Queijos Artesanais",
-  "Doces & Geleias",
-  "Cafés Especiais",
-  "Bebidas",
-  "Mel & Derivados",
-];
 
 const imageUrl = (path?: string | null): string | undefined => {
   if (!path) return undefined;
@@ -27,12 +19,16 @@ export const Discover = () => {
   const [query, setQuery] = useState("");
   const [showAllProducers, setShowAllProducers] = useState(false);
   const [showAllProducts, setShowAllProducts] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   const { data: producers = [], isLoading: loadingProducers } =
     useGetProducersQuery(query || undefined);
 
+  const { data: categories = [], isLoading: loadingCategories } =
+    useGetCategoriesQuery();
+
   const { data: products = [], isLoading: loadingProducts } =
-    useGetProductsQuery(query || undefined);
+    useGetProductsQuery(query || undefined, selectedCategories);
 
   const handleSearch = () => {
     setQuery(search);
@@ -43,6 +39,18 @@ export const Discover = () => {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") handleSearch();
   };
+
+  const toggleCategory = (name: string) => {
+    setSelectedCategories((prev) => {
+      if (prev.includes(name)) {
+        return prev.filter((c) => c !== name);
+      }
+      return [...prev, name];
+    });
+    setShowAllProducts(false);
+  };
+
+  const isAllSelected = selectedCategories.length === 0;
 
   const visibleProducers = showAllProducers
     ? producers
@@ -164,18 +172,38 @@ export const Discover = () => {
 
         {/* Category Filter Pills */}
         <div className="w-full flex items-center gap-3 overflow-x-auto py-4">
-          {categories.map((cat, idx) => (
-            <button
-              key={cat}
-              className={`whitespace-nowrap text-sm font-normal px-5 py-2 rounded-full transition-colors ${
-                idx === 0
-                  ? "bg-base-title text-base-background border border-base-title"
-                  : "border border-[#C9A97A80] text-clay hover:bg-[#DDC6A44D]"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+          {/* "Todos" pill */}
+          <button
+            onClick={() => setSelectedCategories([])}
+            className={`whitespace-nowrap text-sm font-normal px-5 py-2 rounded-full transition-colors ${
+              isAllSelected
+                ? "bg-base-title text-base-background border border-base-title"
+                : "border border-[#C9A97A80] text-clay hover:bg-[#DDC6A44D]"
+            }`}
+          >
+            Todos
+          </button>
+
+          {loadingCategories ? (
+            <span className="text-sm text-clay">Carregando categorias...</span>
+          ) : (
+            categories.map((cat) => {
+              const isSelected = selectedCategories.includes(cat.name);
+              return (
+                <button
+                  key={cat.name}
+                  onClick={() => toggleCategory(cat.name)}
+                  className={`whitespace-nowrap text-sm font-normal px-5 py-2 rounded-full transition-colors ${
+                    isSelected
+                      ? "bg-base-title text-base-background border border-base-title"
+                      : "border border-[#C9A97A80] text-clay hover:bg-[#DDC6A44D]"
+                  }`}
+                >
+                  {cat.description}
+                </button>
+              );
+            })
+          )}
         </div>
 
         {loadingProducts ? (
