@@ -25,7 +25,7 @@ export const ProductCard = ({
         </div>
       ) : (
         <div className="w-full h-[350px] rounded-lg bg-[#C9A97A33] flex items-center justify-center text-argil">
-          <Icon icon="solar:seed-outline" width={48} height={48} />
+          <Icon icon="mdi:seed-outline" width={48} height={48} />
         </div>
       )}
 

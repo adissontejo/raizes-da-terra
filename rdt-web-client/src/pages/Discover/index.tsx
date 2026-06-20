@@ -5,6 +5,7 @@ import { ProductCard, type ProductCardProps } from "./ProductCard";
 import { useGetProducersQuery } from "~/services/api/modules/producers/queries/useGetProducersQuery";
 import { useGetProductsQuery } from "~/services/api/modules/products/queries/useGetProductsQuery";
 import { useGetCategoriesQuery } from "~/services/api/modules/categories/queries/useGetCategoriesQuery";
+import { EmptyState } from "./EmptyState";
 
 const COLS_PRODUTORES = 3;
 const COLS_PRODUTOS = 4;
@@ -116,8 +117,8 @@ export const Discover = () => {
             Carregando produtores...
           </div>
         ) : producers.length === 0 ? (
-          <div className="w-full py-12 flex items-center justify-center text-clay text-sm">
-            Nenhum produtor encontrado.
+          <div className="w-full">
+            <EmptyState type="produtores" />
           </div>
         ) : (
           <div className="w-full grid grid-cols-3 gap-8">
@@ -211,8 +212,8 @@ export const Discover = () => {
             Carregando produtos...
           </div>
         ) : products.length === 0 ? (
-          <div className="w-full py-12 flex items-center justify-center text-clay text-sm">
-            Nenhum produto encontrado.
+          <div className="w-full">
+            <EmptyState type="produtos" />
           </div>
         ) : (
           <>
