@@ -4,8 +4,9 @@ import type { CreateProducerDTO } from "./dtos/create-producer.dto";
 import type { UpdateProducerDTO } from "./dtos/update-producer.dto";
 
 export class ProducersService {
-  public static async getProducers(): Promise<ProducerDTO[]> {
-    const response = await api.get<ProducerDTO[]>("/producers");
+  public static async getProducers(search?: string): Promise<ProducerDTO[]> {
+    const params = search ? { search } : undefined;
+    const response = await api.get<ProducerDTO[]>("/producers", { params });
 
     return response.data;
   }

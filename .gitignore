@@ -33,4 +33,5 @@ npm-debug.log*
 
 # uploads
 /uploads/
+/rdt-api/uploads/
 

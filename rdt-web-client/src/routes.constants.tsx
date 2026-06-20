@@ -3,6 +3,7 @@ import { Home } from "./pages/Home";
 import { RegisterProducer } from "./pages/RegisterProducer";
 import { AppPageWrapper } from "./pages/AppPageWrapper";
 import { ProducerConfig } from "./pages/ProducerConfig";
+import { Discover } from "./pages/Discover";
 
 export const routes: RouteObject[] = [
   {
@@ -24,6 +25,10 @@ export const routes: RouteObject[] = [
       {
         path: "configuracoes-produtor",
         element: <ProducerConfig />,
+      },
+      {
+        path: "descobrir",
+        element: <Discover />,
       },
     ],
   },
