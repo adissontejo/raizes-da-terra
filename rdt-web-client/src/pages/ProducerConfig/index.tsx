@@ -5,6 +5,7 @@ import { MenuButton } from "./MenuButton";
 import { MenuDivider } from "./MenuDivider";
 import { ProfileConfig } from "./ProfileConfig";
 import { ProductsManagement } from "./ProductsManagement";
+import { removeProducerId } from "~/store/producer";
 
 export const ProducerConfig = () => {
   const navigate = useNavigate();
@@ -12,6 +13,12 @@ export const ProducerConfig = () => {
   const [selectedTab, setSelectedTab] = useState<"profile" | "products">(
     "profile",
   );
+
+  const logout = () => {
+    removeProducerId();
+
+    navigate("/");
+  };
 
   return (
     <div className="w-full max-w-7xl py-16 px-8 flex gap-16">
@@ -32,7 +39,7 @@ export const ProducerConfig = () => {
         <MenuButton
           icon={Logout2}
           label="Sair da conta"
-          onClick={() => navigate("/")}
+          onClick={logout}
           className="text-argil-dark!"
         />
       </aside>

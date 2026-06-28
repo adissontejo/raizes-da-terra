@@ -91,7 +91,7 @@ export const ImageUpload = forwardRef<HTMLInputElement, ImageUploadProps>(
           {src && !isLoading ? (
             <img
               src={src}
-              className={`w-full h-full object-cover cursor-pointer ${circular ? "rounded-full" : "rounded-lg"}`}
+              className={`w-full h-full aspect-square object-cover cursor-pointer ${circular ? "rounded-full" : "rounded-lg"}`}
             />
           ) : (
             <div

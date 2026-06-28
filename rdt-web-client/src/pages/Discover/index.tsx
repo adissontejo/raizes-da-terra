@@ -5,7 +5,7 @@ import { ProductCard, type ProductCardProps } from "./ProductCard";
 import { useGetProducersQuery } from "~/services/api/modules/producers/queries/useGetProducersQuery";
 import { useGetProductsQuery } from "~/services/api/modules/products/queries/useGetProductsQuery";
 import { useGetCategoriesQuery } from "~/services/api/modules/categories/queries/useGetCategoriesQuery";
-import { EmptyState } from "./EmptyState";
+import { EmptyState } from "../../components/EmptyState";
 
 const COLS_PRODUTORES = 3;
 const COLS_PRODUTOS = 4;
@@ -154,7 +154,12 @@ export const Discover = () => {
       {/* Roda Teto Divider */}
       <div className="w-full flex items-center justify-center gap-4">
         <div className="flex-1 h-px bg-[#C9A97A4D]" />
-        <Icon icon="solar:leaf-linear" width={28} height={28} className="text-[#C9A97A]" />
+        <Icon
+          icon="solar:leaf-linear"
+          width={28}
+          height={28}
+          className="text-[#C9A97A]"
+        />
         <div className="flex-1 h-px bg-[#C9A97A4D]" />
       </div>
 

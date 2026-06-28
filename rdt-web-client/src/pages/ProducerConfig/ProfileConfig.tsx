@@ -94,7 +94,7 @@ export const ProfileConfig = () => {
       try {
         const { url } = await UploadsService.uploadImage(profilePhotoFile);
 
-        producer.profilePhotoUrl = `${import.meta.env.VITE_SERVER_URL}${url}`;
+        producer.profilePhotoUrl = url;
       } catch {
         toast.error("Erro ao enviar imagem. Tente novamente mais tarde.");
 
@@ -130,7 +130,11 @@ export const ProfileConfig = () => {
         <FormImageUpload
           ref={imageUploadRef}
           name="profilePhotoFile"
-          preselectedSrc={producer?.profilePhotoUrl ?? undefined}
+          preselectedSrc={
+            producer?.profilePhotoUrl
+              ? `${import.meta.env.VITE_SERVER_URL}${producer.profilePhotoUrl}`
+              : undefined
+          }
           className="w-24 h-24"
           circular
           uploadText={false}

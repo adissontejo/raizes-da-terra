@@ -9,3 +9,7 @@ export const retrieveProducerId = (): number | null => {
 
   return isNaN(producerId) ? null : producerId;
 };
+
+export const removeProducerId = () => {
+  localStorage.removeItem(producerIdKey);
+};

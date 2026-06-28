@@ -32,6 +32,8 @@ export const PriceInput = ({
     }
 
     return String(value)
+      .replace(/^0+/, "")
+      .replace(/\D/g, "")
       .split("")
       .map((digit) => Number(digit));
   };

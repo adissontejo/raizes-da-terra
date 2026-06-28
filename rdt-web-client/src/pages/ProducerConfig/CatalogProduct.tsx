@@ -5,7 +5,7 @@ interface CatalogProductProps {
   category: string;
   name: string;
   price: number;
-  imageSrc?: string;
+  imageSrc?: Nullable<string>;
   onEdit: () => void;
   onDelete: () => void;
 }
@@ -23,7 +23,11 @@ export const CatalogProduct = ({
       <div className="flex items-center gap-4">
         <DefaultPic
           icon={BagSmile}
-          src={imageSrc}
+          src={
+            imageSrc
+              ? `${import.meta.env.VITE_SERVER_URL}${imageSrc}`
+              : undefined
+          }
           className="size-20 rounded-xs"
         />
         <div className="flex flex-col gap-[3.5px]">
