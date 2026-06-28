@@ -1,43 +1,108 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "~/components/Button";
-import { ImageUpload } from "~/components/ImageUpload";
-import { Input } from "~/components/Input";
 import { CatalogProduct } from "./CatalogProduct";
-
-// TO-DO: remove temp image imports
-import product1Img from "~/assets/product-1-temp.png";
-import product2Img from "~/assets/product-2-temp.png";
-import { newProductSchema, type NewProductFormData } from "./consts";
+import { productSchema, type ProductFormData } from "./consts";
 import { EditProductModal } from "./EditProductModal";
 import { useState } from "react";
 import {
   Form,
+  FormImageUpload,
+  FormInput,
   FormPriceInput,
   FormSelect,
   FormTextArea,
 } from "~/components/Form";
 import { DeleteProductModal } from "./DeleteProductModal";
+import { UploadsService } from "~/services/api/modules/uploads/uploads.service";
+import type { CreateProductDTO } from "~/services/api/modules/products/dtos/create-product.dto";
+import { toast } from "react-toastify";
+import { useCreateProductMutation } from "~/services/api/modules/products/queries/useCreateProductMutation";
+import { retrieveProducerId } from "~/store/producer";
+import { Navigate } from "react-router";
+import { useGetProductsByProducerQuery } from "~/services/api/modules/products/queries/useGetProductsByProducerQuery";
+import { EmptyState } from "~/components/EmptyState";
+import type { ProductDTO } from "~/services/api/modules/products/dtos/product.dto";
+import { useGetCategoriesQuery } from "~/services/api/modules/categories/queries/useGetCategoriesQuery";
 
 export const ProductsManagement = () => {
-  const formProps = useForm<NewProductFormData>({
-    resolver: zodResolver(newProductSchema),
+  const producerId = retrieveProducerId();
+
+  const formProps = useForm<ProductFormData>({
+    resolver: zodResolver(productSchema),
     reValidateMode: "onBlur",
   });
 
-  const [editProduct, setEditProduct] = useState<unknown | null>(null);
-  const [deleteProduct, setDeleteProduct] = useState<unknown | null>(null);
+  const [editProduct, setEditProduct] = useState<ProductDTO | null>(null);
+  const [deleteProduct, setDeleteProduct] = useState<ProductDTO | null>(null);
+
+  const { mutate: createProduct } = useCreateProductMutation();
+
+  const {
+    data: products,
+    isLoading: isLoadingProducts,
+    isError,
+  } = useGetProductsByProducerQuery(producerId);
+  const { data: categories, isLoading: isLoadingCategories } =
+    useGetCategoriesQuery();
+
+  const onSubmit = async (data: ProductFormData) => {
+    const product: CreateProductDTO = {
+      ...data,
+      producerId: producerId!,
+    };
+
+    const imageFile = formProps.getValues("imageFile");
+
+    if (imageFile) {
+      try {
+        const { url } = await UploadsService.uploadImage(imageFile);
+
+        product.imageUrl = url;
+      } catch {
+        toast.error("Erro ao enviar a imagem. Tente novamente mais tarde.");
+
+        return;
+      }
+    }
+
+    createProduct(
+      { product },
+      {
+        onSuccess: () => {
+          toast.success("Produto cadastrado com sucesso!");
+
+          formProps.reset({
+            price: 0,
+          });
+        },
+        onError: () => {
+          toast.error(
+            "Erro ao cadastrar o produto. Tente novamente mais tarde.",
+          );
+        },
+      },
+    );
+  };
+
+  if (typeof producerId !== "number" || isError) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <div className="w-full gap-16 flex flex-col">
       <Form
         {...formProps}
-        onSubmit={(data) => console.log(data)}
+        onSubmit={onSubmit}
         className="w-full rounded-lg bg-[#C9A97A0D] border border-[#C9A97A4D] p-8 grid grid-cols-3 gap-8"
       >
-        <ImageUpload label="Imagem do Produto" className="w-full" />
+        <FormImageUpload
+          name="imageFile"
+          label="Imagem do Produto"
+          className="w-full"
+        />
         <div className="w-full col-span-2 grid grid-cols-2 gap-5">
-          <Input
+          <FormInput
             name="name"
             label="Nome do Produto"
             placeholder="Ex: Goiabada Cascão de Corte"
@@ -47,7 +112,13 @@ export const ProductsManagement = () => {
           <FormSelect
             name="category"
             label="Categoria"
-            options={[{ label: "Doces", value: "sweets" }]}
+            options={
+              categories?.map((cat) => ({
+                label: cat.description,
+                value: cat.name,
+              })) || []
+            }
+            isLoading={isLoadingCategories}
           />
           <FormTextArea
             name="description"
@@ -71,39 +142,49 @@ export const ProductsManagement = () => {
             Seu Catálogo
           </p>
           <div className="rounded-full border border-[#C9A97A4D] bg-[#C9A97A33] px-3 py-1">
-            <span className="font-medium text-xs text-clay">2 itens</span>
+            <span className="font-medium text-xs text-clay">
+              {isLoadingProducts
+                ? "Carregando..."
+                : `${products?.length} ${products?.length === 1 ? "item" : "itens"}`}
+            </span>
           </div>
         </div>
         <div className="w-full flex flex-col gap-4">
-          <CatalogProduct
-            category="Doces & Geleias"
-            name="Goiabada Cascão de Corte"
-            price={35.0}
-            imageSrc={product1Img}
-            onEdit={() => setEditProduct(1)}
-            onDelete={() => setDeleteProduct(1)}
-          />
-          <CatalogProduct
-            category="Doces & Geleias"
-            name="Doce de Leite do Sítio"
-            price={28.8}
-            imageSrc={product2Img}
-            onEdit={() => setEditProduct(1)}
-            onDelete={() => setDeleteProduct(1)}
-          />
+          {isLoadingProducts ? (
+            <div className="w-full py-12 flex items-center justify-center text-clay text-sm">
+              Carregando produtos...
+            </div>
+          ) : !products?.length ? (
+            <div className="w-full">
+              <EmptyState type="produtos" />
+            </div>
+          ) : (
+            products.map((product) => (
+              <CatalogProduct
+                key={product.id}
+                category={
+                  categories?.find((cat) => cat.name === product.category)
+                    ?.description || product.category
+                }
+                name={product.name}
+                price={product.price}
+                imageSrc={product.imageUrl}
+                onEdit={() => setEditProduct(product)}
+                onDelete={() => setDeleteProduct(product)}
+              />
+            ))
+          )}
         </div>
       </div>
 
       <EditProductModal
         product={editProduct}
         onClose={() => setEditProduct(null)}
-        onSave={() => setEditProduct(null)}
       />
 
       <DeleteProductModal
         product={deleteProduct}
         onClose={() => setDeleteProduct(null)}
-        onConfirm={() => setDeleteProduct(null)}
       />
     </div>
   );

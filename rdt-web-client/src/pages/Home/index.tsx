@@ -15,14 +15,60 @@ import { Link, useNavigate } from "react-router";
 import backgroundImg from "~/assets/home-background.png";
 import logoImg from "~/assets/logo.svg";
 import { Button } from "~/components/Button";
-import { Input } from "~/components/Input";
 import { BenefitsTitle } from "./BenefitsTitle";
 import { BenefitCard } from "./BenefitCard";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
+import z from "zod";
+import { toast } from "react-toastify";
+import { storeProducerId } from "~/store/producer";
+import { Form, FormInput } from "~/components/Form";
+import { ProducersService } from "~/services/api/modules/producers/producers.service";
 
 export const Home = () => {
   const productViewRef = useRef<HTMLDivElement>(null);
 
   const navigate = useNavigate();
+
+  const formProps = useForm<{
+    email: string;
+    password: string;
+  }>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    resolver: zodResolver(
+      z.object({
+        email: z.email("E-mail inválido"),
+        password: z
+          .string("Preencha a senha")
+          .min(6, "Senha deve ter no mínimo 6 caracteres"),
+      }),
+    ),
+  });
+
+  const login = async (data: { email: string; password: string }) => {
+    try {
+      const producers = await ProducersService.getProducers();
+
+      const producer = producers?.find(
+        (producer) => producer.email === data.email,
+      );
+
+      if (producer) {
+        storeProducerId(producer.id);
+
+        navigate("/configuracoes-produtor");
+      } else {
+        toast.error("E-mail ou senha inválidos");
+      }
+    } catch {
+      toast.error(
+        "Ocorreu um erro ao tentar fazer login. Tente novamente mais tarde.",
+      );
+    }
+  };
 
   return (
     <div className="w-full flex flex-col">
@@ -43,6 +89,7 @@ export const Home = () => {
             <img src={logoImg} className="h-11.25" />
 
             <button
+              onClick={() => navigate("/descobrir")}
               className="
                 flex px-5 py-2 border border-[#F5E9D680] rounded-full gap-2 items-center
                 hover:brightness-70 transition-[filter]
@@ -77,7 +124,7 @@ export const Home = () => {
                 </button>
                 <button
                   className="relative top-0.5 pb-3 text-sm border-b-2 border-b-transparent transition-colors pt-0.5 text-clay"
-                  onClick={() => navigate("/configuracoes-produtor")}
+                  onClick={() => navigate("/cadastro-produtor")}
                 >
                   Criar conta
                 </button>
@@ -92,17 +139,28 @@ export const Home = () => {
                 </p>
               </div>
 
-              <form
+              <Form
+                {...formProps}
                 className="flex flex-col gap-5"
-                onSubmit={(e) => [
-                  e.preventDefault(),
-                  navigate("/configuracoes-produtor"),
-                ]}
+                onSubmit={login}
               >
-                <Input label="E-mail" placeholder="seu@email.com" />
-                <Input label="Senha" type="password" placeholder="••••••••" />
-                <Button label="Entrar na Plataforma" solarIcon={ArrowRight} />
-              </form>
+                <FormInput
+                  name="email"
+                  label="E-mail"
+                  placeholder="seu@email.com"
+                />
+                <FormInput
+                  name="password"
+                  label="Senha"
+                  type="password"
+                  placeholder="••••••••"
+                />
+                <Button
+                  type="submit"
+                  label="Entrar na Plataforma"
+                  solarIcon={ArrowRight}
+                />
+              </Form>
 
               <p className="text-xs text-clay self-center">
                 Quer vender suas criações?{" "}
