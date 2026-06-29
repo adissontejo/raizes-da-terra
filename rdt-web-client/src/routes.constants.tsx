@@ -15,7 +15,6 @@ export const routes: RouteObject[] = [
     element: <RegisterProducer />,
   },
   {
-    path: "/",
     element: (
       <AppPageWrapper>
         <Outlet />
