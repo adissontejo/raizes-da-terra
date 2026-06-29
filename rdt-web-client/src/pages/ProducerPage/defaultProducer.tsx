@@ -1,0 +1,26 @@
+export const defaultProducer = {
+  brandName: "Dona Maria do Carmo",
+  email: "contato@donamariadoces.com.br",
+  state: "RN",
+  city: "São Gonçalo do Amarante",
+  address: "Sítio Cajueiro",
+  complement: "",
+  phone: "(84) 99999-9999",
+  instagram: "",
+  bioPhrase:
+    "Mãos que preservam a receita original da goiabada cascão...",
+  bioTitle: "O tempo certo do fogo e do afeto.",
+  bio: "Tudo começou com o tacho que era da minha avó...",
+  productsTitle: "Feito no tacho de cobre",
+  productsSubtitle:
+    "As receitas que atravessaram gerações no Sítio Cajueiro.",
+  imageUrl: "../../assets/pfp-temp.png",
+  p1Title: "Goiabada Cascão de Corte",
+  p1ImageUrl: "../../assets/product-1-temp.png",
+  p1Description: "Feita apenas com goiabas maduras do quintal e açúcar. Ponto firme, ideal para comer com queijo.",
+  p1Embalagem: "Peças a partir de 500g",
+  p2Title: "Doce de Leite do Sítio",
+  p2ImageUrl: "../../assets/product-2-temp.png",
+  p2Description: "Leite fresco ordenhado na manhã, cozido por horas no fogão a lenha até atingir a cor de caramelo escuro.",
+  p2Embalagem: "Potes de 300g",
+};
