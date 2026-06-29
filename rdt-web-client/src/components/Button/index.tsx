@@ -7,11 +7,15 @@ export interface ButtonProps extends DetailedHTMLProps<
 > {
   label?: string;
   solarIcon?: Icon;
+  iconPosition?: "left" | "right";
+  TextColor?: string;
 }
 
 export const Button = ({
   label,
   solarIcon: Icon,
+  iconPosition = "right",
+  TextColor = "base-background",
   className,
   ...props
 }: ButtonProps) => {
@@ -21,13 +25,14 @@ export const Button = ({
       className={`
         ${className}
         px-8 py-3 rounded-lg bg-base-title flex justify-center items-center gap-2
-        text-sm text-base-background font-medium
+        text-sm text-5xl text-${TextColor} font-medium
         hover:brightness-80 disabled:cursor-not-allowed disabled:brightness-100 disabled:bg-base-label
         transition-[filter,background]
       `}
     >
+      {iconPosition === "left" && Icon && <Icon size={20} color="var(--color-${TextColor})" />}
       <span>{label}</span>
-      {Icon && <Icon size={20} color="var(--color-base-background)" />}
+      {iconPosition === "right" && Icon && <Icon size={20} color="var(--color-${TextColor})" />}
     </button>
   );
 };
