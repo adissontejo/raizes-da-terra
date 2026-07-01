@@ -29,7 +29,7 @@ export const routes: RouteObject[] = [
       {
         path: "pagina-produtor",
         element: <ProducerPage />,
-      }
+      },
         path: "descobrir",
         element: <Discover />,
       },
