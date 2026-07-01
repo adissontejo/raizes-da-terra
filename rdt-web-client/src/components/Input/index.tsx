@@ -1,3 +1,4 @@
+import { useMask, type MaskOptions } from "@react-input/mask";
 import { Eye } from "@solar-icons/react";
 import {
   forwardRef,
@@ -6,6 +7,7 @@ import {
   type DetailedHTMLProps,
   type InputHTMLAttributes,
 } from "react";
+import { mergeRefs } from "react-merge-refs";
 
 export interface InputProps extends DetailedHTMLProps<
   InputHTMLAttributes<HTMLInputElement>,
@@ -13,11 +15,29 @@ export interface InputProps extends DetailedHTMLProps<
 > {
   label?: string;
   error?: string;
+  mask?: MaskOptions;
+  isLoading?: boolean;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, type, className, error, ...props }, ref) => {
+  (
+    {
+      label,
+      type,
+      value,
+      placeholder,
+      className,
+      error,
+      mask,
+      isLoading,
+      ...props
+    },
+    ref,
+  ) => {
     const id = useId();
+
+    const maskRef = useMask(mask);
+    const inputRef = mergeRefs(mask ? [ref, maskRef] : [ref]);
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -32,10 +52,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           </label>
         )}
         <input
-          ref={ref}
+          ref={inputRef}
           id={id}
           type={showPassword ? "text" : type}
           {...props}
+          value={isLoading ? undefined : value}
+          placeholder={isLoading ? "Carregando..." : placeholder}
+          disabled={isLoading}
           className={`
             text-sm border border-[#C9A97A4D] bg-[#C9A97A0D] pl-4 pr-8 py-2.5 rounded-lg h-10 w-full text-base-title
             placeholder:text-[#7A4E2D80] placeholder:text-sm focus:bg-[#C9A97A1A]

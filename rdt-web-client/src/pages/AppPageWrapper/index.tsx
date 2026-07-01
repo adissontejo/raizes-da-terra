@@ -1,15 +1,29 @@
 import logoImg from "~/assets/logo-dark.svg";
 import { DefaultPic } from "~/components/DefaultPic";
-
-// TO-DO: delete asset
-import pfpTemp from "~/assets/pfp-temp.png";
 import { NavButton } from "./NavButton";
+import { retrieveProducerId } from "~/store/producer";
+import { useGetProducerByIdQuery } from "~/services/api/modules/producers/queries/useGetProducerByIdQuery";
+import { Navigate, useNavigate } from "react-router";
 
 export interface PageWrapperProps {
   children: React.ReactNode;
 }
 
 export const AppPageWrapper = ({ children }: PageWrapperProps) => {
+  const producerId = retrieveProducerId();
+
+  const {
+    data: producer,
+    isLoading: isLoadingProducer,
+    isError,
+  } = useGetProducerByIdQuery(producerId);
+
+  const navigate = useNavigate();
+
+  if (isError) {
+    return <Navigate to="/" />;
+  }
+
   return (
     <div className="bg-base-background w-full min-h-screen flex flex-col gap-2.5">
       <header className="w-full border-b border-b-[#C9A97A4D] py-6 px-8 flex gap-2 justify-between">
@@ -17,14 +31,25 @@ export const AppPageWrapper = ({ children }: PageWrapperProps) => {
         <div className="flex items-center gap-4">
           <nav className="flex items-center gap-6">
             <NavButton label="Descobrir" to="/descobrir" />
-            <NavButton label="Produtores" to="/produtores" />
           </nav>
-          <button className="rounded-full border border-[#2C1A0E33] py-2 px-5 flex items-center justify-start gap-4">
-            <span className="font-medium text-sm text-base-title">
-              Dona Maria do Carmo
-            </span>
-            <DefaultPic src={pfpTemp} className="size-8 rounded-full" />
-          </button>
+          {!!producerId && (
+            <button
+              className="rounded-full border border-[#2C1A0E33] py-2 px-5 flex items-center justify-start gap-4"
+              onClick={() => navigate("/configuracoes-produtor")}
+            >
+              <span className="font-medium text-sm text-base-title">
+                {isLoadingProducer ? "Carregando..." : producer?.brandName}
+              </span>
+              <DefaultPic
+                src={
+                  producer?.profilePhotoUrl
+                    ? `${import.meta.env.VITE_SERVER_URL}${producer.profilePhotoUrl}`
+                    : undefined
+                }
+                className="size-8 rounded-full"
+              />
+            </button>
+          )}
         </div>
       </header>
 

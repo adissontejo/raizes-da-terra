@@ -1,8 +1,10 @@
 package br.ufrn.imd.rdt_api.controller;
 
 import br.ufrn.imd.rdt_api.dto.ApiResponse;
+import br.ufrn.imd.rdt_api.dto.category.CategoryDTO;
 import br.ufrn.imd.rdt_api.dto.product.ProductRequestDTO;
 import br.ufrn.imd.rdt_api.dto.product.ProductResponseDTO;
+import br.ufrn.imd.rdt_api.enums.ProductCategory;
 import br.ufrn.imd.rdt_api.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,8 +24,15 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ProductResponseDTO>>> findAll() {
-        return ResponseEntity.ok(ApiResponse.ok(service.findAll()));
+    public ResponseEntity<ApiResponse<List<ProductResponseDTO>>> findAll(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) List<ProductCategory> categories) {
+        return ResponseEntity.ok(ApiResponse.ok(service.findAll(name, categories)));
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<ApiResponse<List<CategoryDTO>>> getAllCategories() {
+        return ResponseEntity.ok(ApiResponse.ok(service.getAllCategories()));
     }
 
     @GetMapping("/producer/{producerId}")
