@@ -8,6 +8,7 @@ export interface ButtonProps extends DetailedHTMLProps<
   label?: string;
   solarIcon?: Icon;
   iconPosition?: "left" | "right";
+  TextColor?: string;
   variant?: "primary" | "danger" | "outline";
 }
 
@@ -15,6 +16,7 @@ export const Button = ({
   label,
   solarIcon: Icon,
   iconPosition = "right",
+  TextColor = "base-background",
   variant = "primary",
   className,
   ...props
@@ -30,6 +32,7 @@ export const Button = ({
         ${variant === "primary" && "bg-base-title text-base-background hover:brightness-80"}
         ${variant === "danger" && "bg-argil-dark text-base-background hover:brightness-80"}
         ${variant === "outline" && "border border-clay text-base-title hover:bg-[#DDC6A44D]"}
+        ${TextColor ? `text-${TextColor}` : ""}
       `}
     >
       {iconPosition === "left" && Icon && <Icon size={20} color="inherit" />}
