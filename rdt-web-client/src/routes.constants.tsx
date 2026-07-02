@@ -27,7 +27,7 @@ export const routes: RouteObject[] = [
         element: <ProducerConfig />,
       },
       {
-        path: "pagina-produtor",
+        path: "pagina-produtor/:id",
         element: <ProducerPage />,
       },
       {

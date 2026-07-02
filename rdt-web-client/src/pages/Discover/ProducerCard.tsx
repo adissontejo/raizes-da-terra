@@ -7,6 +7,7 @@ export interface ProducerCardProps {
   rating: number;
   description: string;
   imageSrc?: string;
+  onClick?: () => void;
 }
 
 export const ProducerCard = ({
@@ -16,9 +17,13 @@ export const ProducerCard = ({
   rating,
   description,
   imageSrc,
+  onClick,
 }: ProducerCardProps) => {
   return (
-    <div className="w-full rounded-lg border border-[#C9A97A4D] bg-[#C9A97A0D] overflow-hidden">
+    <div
+      className="w-full rounded-lg border border-[#C9A97A4D] bg-[#C9A97A0D] overflow-hidden cursor-pointer hover:brightness-90 transition-all duration-200"
+      onClick={onClick}
+    >
       {imageSrc ? (
         <div className="w-full h-[238.75px]">
           <img
