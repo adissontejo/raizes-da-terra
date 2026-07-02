@@ -6,6 +6,7 @@ import { useGetProducersQuery } from "~/services/api/modules/producers/queries/u
 import { useGetProductsQuery } from "~/services/api/modules/products/queries/useGetProductsQuery";
 import { useGetCategoriesQuery } from "~/services/api/modules/categories/queries/useGetCategoriesQuery";
 import { EmptyState } from "../../components/EmptyState";
+import { useNavigate } from "react-router";
 
 const COLS_PRODUTORES = 3;
 const COLS_PRODUTOS = 4;
@@ -21,6 +22,8 @@ export const Discover = () => {
   const [showAllProducers, setShowAllProducers] = useState(false);
   const [showAllProducts, setShowAllProducts] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+  const navigate = useNavigate();
 
   const { data: producers = [], isLoading: loadingProducers } =
     useGetProducersQuery(query || undefined);
@@ -131,7 +134,7 @@ export const Discover = () => {
                 description: producer.bioPhrase ?? producer.bio ?? "",
                 imageSrc: imageUrl(producer.profilePhotoUrl),
               };
-              return <ProducerCard key={producer.id} {...card} />;
+              return <ProducerCard key={producer.id} {...card} onClick={() => navigate(`/pagina-produtor/${producer.id}`, { state: { producer } })} />;
             })}
           </div>
         )}
